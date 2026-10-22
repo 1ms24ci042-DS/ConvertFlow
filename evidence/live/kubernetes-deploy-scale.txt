@@ -1,0 +1,94 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  56.83kB
+Step 1/13 : FROM maven:3.9.9-eclipse-temurin-17 AS build
+ ---> f58d59b6273e
+Step 2/13 : WORKDIR /build
+ ---> Using cache
+ ---> 95e47e56ca49
+Step 3/13 : COPY pom.xml .
+ ---> Using cache
+ ---> aae1f40082f7
+Step 4/13 : COPY src ./src
+ ---> Using cache
+ ---> e5c5f326cc68
+Step 5/13 : RUN mvn -B clean verify
+ ---> Using cache
+ ---> 056e4d08679a
+Step 6/13 : FROM eclipse-temurin:17-jre-jammy
+ ---> b3054a20e1a8
+Step 7/13 : RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+ ---> Using cache
+ ---> 052c6587cd73
+Step 8/13 : WORKDIR /app
+ ---> Using cache
+ ---> 41bb9e32ad10
+Step 9/13 : COPY --from=build /build/target/convertflow.jar /app/convertflow.jar
+ ---> Using cache
+ ---> 9aa763947b92
+Step 10/13 : USER 10001:10001
+ ---> Using cache
+ ---> 1257f467d15b
+Step 11/13 : ENV APP_PORT=8080
+ ---> Using cache
+ ---> 4a6463f72f58
+Step 12/13 : EXPOSE 8080
+ ---> Using cache
+ ---> f230e6616028
+Step 13/13 : ENTRYPOINT ["java", "-jar", "/app/convertflow.jar"]
+ ---> Using cache
+ ---> 1a544e259c91
+Successfully built 1a544e259c91
+Successfully tagged convertflow:1.0.0
+Image: "convertflow:1.0.0" with ID "sha256:1a544e259c910984e54406398f7dd64eea2105cf69302fa0f29132a2ffb558fa" not yet present on node "convertflow-control-plane", loading...
+configmap/convertflow-config created
+deployment.apps/convertflow created
+service/convertflow created
+Waiting for deployment "convertflow" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "convertflow" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "convertflow" rollout to finish: 2 of 3 updated replicas are available...
+deployment "convertflow" successfully rolled out
+Verified 3 Pods, all Ready, none terminating
+NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE                        NOMINATED NODE   READINESS GATES
+convertflow-dbf888cb9-b5z26   1/1     Running   0          7s    10.244.0.6   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-q6sng   1/1     Running   0          7s    10.244.0.7   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-wtx7q   1/1     Running   0          7s    10.244.0.5   convertflow-control-plane   <none>           <none>
+deployment.apps/convertflow scaled
+Waiting for deployment "convertflow" rollout to finish: 3 of 5 updated replicas are available...
+Waiting for deployment "convertflow" rollout to finish: 4 of 5 updated replicas are available...
+deployment "convertflow" successfully rolled out
+Verified 5 Pods, all Ready, none terminating
+NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE                        NOMINATED NODE   READINESS GATES
+convertflow-dbf888cb9-2v8lx   1/1     Running   0          7s    10.244.0.8   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-855qk   1/1     Running   0          7s    10.244.0.9   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-b5z26   1/1     Running   0          14s   10.244.0.6   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-q6sng   1/1     Running   0          14s   10.244.0.7   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-wtx7q   1/1     Running   0          14s   10.244.0.5   convertflow-control-plane   <none>           <none>
+deployment.apps/convertflow scaled
+deployment "convertflow" successfully rolled out
+Verified 3 Pods, all Ready, none terminating
+NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE                        NOMINATED NODE   READINESS GATES
+convertflow-dbf888cb9-b5z26   1/1     Running   0          16s   10.244.0.6   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-q6sng   1/1     Running   0          16s   10.244.0.7   convertflow-control-plane   <none>           <none>
+convertflow-dbf888cb9-wtx7q   1/1     Running   0          16s   10.244.0.5   convertflow-control-plane   <none>           <none>
+NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+convertflow   NodePort   10.96.133.255   <none>        8080:30080/TCP   16s
+apiVersion: v1
+data:
+  APP_PORT: "8080"
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"APP_PORT":"8080"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"convertflow-config","namespace":"default"}}
+  creationTimestamp: "2026-10-22T14:59:17Z"
+  name: convertflow-config
+  namespace: default
+  resourceVersion: "627"
+  uid: 86d0dd85-6652-4029-a6c7-b17530976bac
+Now run: kubectl --context kind-convertflow port-forward service/convertflow 8081:8080
+Then: curl "http://localhost:8081/convert?from=km&to=mi&value=5"
+NAME                    DESIRED   CURRENT   READY   AGE
+convertflow-dbf888cb9   3         3         3       17s

@@ -1,0 +1,12 @@
+● convertflow.service - ConvertFlow Unit Converter API
+     Loaded: loaded (/etc/systemd/system/convertflow.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-10-22 20:26:37 IST; 5s ago
+   Main PID: 22161 (java)
+      Tasks: 24 (limit: 16597)
+     Memory: 29.5M (peak: 31.1M)
+        CPU: 242ms
+     CGroup: /system.slice/convertflow.service
+             └─22161 /usr/bin/java -jar /opt/convertflow/convertflow.jar
+
+Oct 22 20:26:37 sathwika-Vivobook-ASUSLaptop-X1502ZA-X1502ZA systemd[1]: Started convertflow.service - ConvertFlow Unit Converter API.
+Oct 22 20:26:37 sathwika-Vivobook-ASUSLaptop-X1502ZA-X1502ZA java[22161]: ConvertFlow listening on port 8080

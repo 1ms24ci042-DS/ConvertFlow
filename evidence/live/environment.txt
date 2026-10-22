@@ -1,0 +1,61 @@
+Linux-7.0.0-38-generic-x86_64-with-glibc2.39
+$ git --version
+git version 2.43.0
+
+$ java -version
+openjdk version "21.0.12.1" 2026-08-18
+OpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)
+OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)
+
+$ ansible-playbook --version
+ansible-playbook [core 2.16.3]
+  config file = None
+  configured module search path = ['/home/sathwika/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  ansible collection location = /home/sathwika/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible-playbook
+  python version = 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = True
+
+$ sg docker -c docker version
+Client:
+ Version:           29.1.3
+ API version:       1.52
+ Go version:        go1.24.4
+ Git commit:        29.1.3-0ubuntu3~24.04.2
+ Built:             Wed Apr 29 16:41:06 2026
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server:
+ Engine:
+  Version:          29.1.3
+  API version:      1.52 (minimum version 1.44)
+  Go version:       go1.24.4
+  Git commit:       29.1.3-0ubuntu3~24.04.2
+  Built:            Wed Apr 29 16:41:06 2026
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          2.2.1
+  GitCommit:        
+ runc:
+  Version:          1.3.4-0ubuntu1~24.04.1
+  GitCommit:        
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        
+
+$ /tmp/convertflow-bin/kind version
+kind v0.27.0 go1.23.6 linux/amd64
+
+$ /tmp/convertflow-bin/kubectl version --client
+Client Version: v1.32.2
+Kustomize Version: v5.5.0
+
+$ systemctl show convertflow -p ActiveState -p SubState -p ExecMainPID -p ExecMainStartTimestamp
+ExecMainStartTimestamp=Thu 2026-10-22 20:26:37 IST
+ExecMainPID=22161
+ActiveState=active
+SubState=running

@@ -1,0 +1,6 @@
+*   4e3295b Merge conversion API with DevOps pipeline
+|\  
+| * 460a70c Implement conversion API and automated HTTP tests
+* | 6840939 Configure CI and application deployment
+|/  
+* 1cce190 Initialize ConvertFlow Maven project

@@ -1,0 +1,706 @@
+\documentclass[12pt,a4paper]{article}
+
+% ================= PACKAGES =================
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage[most]{tcolorbox}
+\usepackage{mathptmx}   % Times New Roman-equivalent font, applies to entire document
+
+% ================= FONT SIZE LADDER =================
+% Absolute sizes so nothing depends on class-relative scaling.
+\newcommand{\sizeEighteen}{\fontsize{18pt}{22pt}\selectfont}  % \section
+\newcommand{\sizeSixteen}{\fontsize{16pt}{20pt}\selectfont}   % \subsection
+\newcommand{\sizeFourteen}{\fontsize{14pt}{17pt}\selectfont}  % \subsubsection
+\newcommand{\sizeTwelve}{\fontsize{12pt}{14.5pt}\selectfont}  % body / minimum
+
+% ================= HEADER COLORS =================
+\definecolor{RamaiahBlue}{RGB}{27,31,92}
+\definecolor{RamaiahMaroon}{RGB}{139,30,63}
+
+% ================= CODE LISTING STYLE =================
+% basicstyle and numberstyle both forced to 12pt -- nothing prints smaller.
+% xleftmargin keeps the 12pt line numbers inside the A4 text block.
+\lstdefinestyle{codestyle}{
+    backgroundcolor=\color{black!5},
+    commentstyle=\color{green!50!black},
+    keywordstyle=\color{blue},
+    stringstyle=\color{orange},
+    basicstyle=\ttfamily\fontsize{12pt}{14.4pt}\selectfont,
+    numberstyle=\ttfamily\fontsize{12pt}{14.4pt}\selectfont,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    numbers=left,
+    numbersep=8pt,
+    xleftmargin=3.2em,
+    aboveskip=10pt,
+    belowskip=10pt,
+    showstringspaces=false
+}
+\lstset{style=codestyle}
+
+% ================= HEADING FORMATS =================
+\titleformat{\section}{\sizeEighteen\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\sizeSixteen\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\sizeFourteen\bfseries}{\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{18pt}{10pt}
+\titlespacing*{\subsection}{0pt}{16pt}{8pt}
+\titlespacing*{\subsubsection}{0pt}{14pt}{7pt}
+
+% ================= REPEATABLE HEADER BANNER =================
+\newcommand{\reportheader}{%
+\noindent
+\begin{minipage}[c]{0.42\textwidth}
+  \includegraphics[height=1.2cm]{ramaiah_logo.jpg}
+\end{minipage}%
+\begin{minipage}[c]{0.62\textwidth}
+  \raggedleft
+  {\color{RamaiahBlue}\sizeFourteen\bfseries Department of CSE (Artificial Intelligence \& Machine Learning) and CSE (Cyber Security)}
+\end{minipage}\\[0.2cm]
+\noindent\textcolor{RamaiahMaroon}{\rule{\linewidth}{1.2pt}}
+\vspace{0.4cm}
+}
+
+% ================= STUDENT INSTRUCTION BOX (edit-this-part, red) =================
+\newtcolorbox{studentnote}{
+  colback=yellow!10,
+  colframe=red!60!black,
+  boxrule=0.6pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=5pt, bottom=5pt,
+  fontupper=\sizeTwelve,
+  fonttitle=\sizeTwelve\bfseries,
+  title=\textcolor{red!60!black}{Student Instructions --- Edit This Part},
+  before skip=9pt, after skip=11pt
+}
+
+% ================= DEMO INFO BOX (blue, informational) =================
+\newtcolorbox{demoinfo}{
+  colback=blue!5,
+  colframe=RamaiahBlue,
+  boxrule=0.6pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=5pt, bottom=5pt,
+  fontupper=\sizeTwelve,
+  fonttitle=\sizeTwelve\bfseries,
+  title=\textcolor{RamaiahBlue}{What to Expect},
+  before skip=9pt, after skip=11pt
+}
+
+\begin{document}
+\pagestyle{empty}
+\sizeTwelve
+
+% ======================================================
+% PAGE 1: TITLE PAGE
+% ======================================================
+\reportheader
+
+\vspace{1.0cm}
+\begin{center}
+{\sizeEighteen \bfseries SELF LEARNING ACTIVITY REPORT \par}
+
+\vspace{1.2cm}
+
+{\sizeTwelve Submitted in partial fulfilment of the Requirements for \\[0.2cm]
+the Academics of 5\textsuperscript{th} Semester, B.E in CSE (Artificial Intelligence and Machine Learning) \par}
+
+\vspace{1.2cm}
+
+{\sizeEighteen \bfseries DEVOPS \par}
+
+\vspace{0.5cm}
+
+{\sizeSixteen \bfseries 24CIAEC59 \par}
+
+\vspace{1.2cm}
+
+{\sizeTwelve In \par}
+
+\vspace{0.45cm}
+
+{\sizeFourteen \bfseries Dept. of CSE (Artificial Intelligence and Machine Learning) \par}
+
+\vspace{1.2cm}
+
+{\sizeTwelve By \par}
+
+\vspace{0.4cm}
+
+{\sizeFourteen \bfseries USN: 1MS24CI\_\_\_ \par}
+
+\vspace{1.5cm}
+
+{\sizeTwelve Under the guidance of \par}
+\vspace{0.3cm}
+
+{\sizeFourteen \bfseries Mr. Prashanth Reddy C \par}
+\vspace{0.15cm}
+
+{\sizeTwelve Senior Lecturer \par}
+{\sizeTwelve Department of CSE (AI \& ML) and CSE (Cyber Security) \par}
+
+\vspace{1.5cm}
+
+{\sizeSixteen \bfseries M. S. Ramaiah Institute of Technology \par}
+\vspace{0.3cm}
+{\sizeTwelve (Autonomous Institute Affiliated to VTU) \\ MSR Nagar, MSRIT Post \par}
+\vspace{0.1cm}
+{\sizeTwelve Bangalore-560054, Karnataka, India \par}
+\end{center}
+
+\newpage
+
+% ======================================================
+% PAGE 2: CERTIFICATE
+% ======================================================
+\reportheader
+
+\vspace{1.0cm}
+\begin{center}
+{\sizeEighteen \bfseries Certificate \par}
+\end{center}
+
+\vspace{0.8cm}
+
+\noindent
+{\sizeTwelve
+This is to certify that the work carried out is a bonafide record of the project based learning activity work on the DevOps course done by NAME (USN) under my supervision and guidance, in partial fulfilment of the requirements for the award of the Bachelor of Engineering in Computer Science \& Engineering (Artificial Intelligence and Machine Learning) from Ramaiah Institute of Technology, Bangalore for the academic year 2026-2027.
+\par}
+
+\vspace{3.5cm}
+
+\noindent
+{\sizeTwelve Candidate Sign \hfill Faculty Sign \par}
+
+\newpage
+\pagestyle{plain}
+
+% ======================================================
+% PAGE: HOW TO USE THIS TEMPLATE
+% ======================================================
+\section*{How to Use This Template}
+
+\begin{studentnote}
+This page is for your reference only --- \textbf{delete this entire page} before final submission. It is not part of the graded report.
+\end{studentnote}
+
+\subsection*{Do NOT change}
+\begin{itemize}[nosep]
+    \item The header banner (logo, colors, rule line) on Pages 1 and 2
+    \item The Certificate page wording and layout
+    \item Section headings: Abstract, Introduction, Implementation, Development Environment, Description of the Activity, Results, Conclusion, References
+    \item The Assessment Rubrics table and Marks Awarded table structure
+    \item The overall page order
+\end{itemize}
+
+\subsection*{What you MUST edit}
+\begin{itemize}[nosep]
+    \item \textbf{Page 1:} Your semester number and your USN
+    \item \textbf{Page 2:} Your name and USN in place of \texttt{NAME (USN)}
+    \item \textbf{Marks tables:} Leave blank --- filled in by the evaluator only
+    \item \textbf{Component 1 \& 2 sections:} Your chosen application, Abstract, Introduction, Development Environment, all code blocks, your chosen Enhancement, Description of the Activity, Results (screenshots), and Conclusion --- see the highlighted boxes marked \textcolor{red!60!black}{\bfseries Student Instructions} throughout this document for exactly what to change in each part
+\end{itemize}
+
+\subsection*{Final self-check before submitting}
+\begin{itemize}[nosep]
+    \item[$\square$] No \texttt{<repo-url>}, \texttt{devops-demo}, or other placeholder text remains anywhere
+    \item[$\square$] Every ``[Insert screenshots here]'' has been replaced with a real image
+    \item[$\square$] USN and semester filled in on the title page
+    \item[$\square$] Name/USN filled in on the certificate
+    \item[$\square$] Code blocks match what's actually in your GitHub repo (the evaluator will compare)
+    \item[$\square$] Both components include a working, demonstrated Enhancement --- not just a description
+    \item[$\square$] Abstract, Description, and Conclusion are written in your own words, not copied from this template
+    \item[$\square$] This ``How to Use This Template'' page and the ``What to Expect'' page have been deleted
+\end{itemize}
+
+\newpage
+
+% ======================================================
+% LIST OF ACTIVITIES
+% ======================================================
+\section*{LIST OF PROJECT BASED LEARNING COMPONENTS}
+
+\noindent
+{\sizeTwelve
+\textbf{COURSE NAME:} DevOps \hfill \textbf{COURSE CODE:} 24CIAEC59 \\
+\textbf{CREDITS:} 1:0:0 \hfill \textbf{CONTACT HOURS:} 15L \\
+\textbf{MAX. MARKS:} 20
+\par}
+
+\vspace{0.6cm}
+
+{\sizeTwelve
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{|>{\centering\arraybackslash}m{1.2cm}|>{\raggedright\arraybackslash}p{10.6cm}|>{\centering\arraybackslash}m{1.8cm}|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Sl. No}} &
+\multicolumn{1}{c|}{\textbf{Description}} &
+\multicolumn{1}{c|}{\textbf{Marks}} \\
+\hline
+\endhead
+
+1 &
+\textbf{CI/CD Pipeline using Git, Maven/Gradle and Jenkins.}
+Set up a version-controlled build pipeline for a sample application. Create a Git repository, use feature branching and merging, configure a Maven or Gradle build with dependency management, integrate the project into a Jenkins job that pulls from Source Code Management (SCM), triggers automatically on commit, executes the build, performs a post-build action, and add one CI-related enhancement (automated tests, build versioning, or GitHub Actions).
+
+\textit{Covers: Unit 1 (DevOps culture/pipeline), Unit 2 (Git, Maven/Gradle), Unit 3 (Jenkins CI). Maps to CO1, CO2, CO3.}
+& 10 \\
+\hline
+
+2 &
+\textbf{Configuration Management with Ansible and Deployment on Kubernetes.}
+Write an Ansible playbook (using variables, handlers, and at least one role) to configure and deploy the application built in Component 1. Containerize the application and write Kubernetes manifests (Deployment, Service, and a ConfigMap/PVC where applicable). Deploy on a local cluster (Minikube/Kind), demonstrate scaling using replica sets, show the use of labels and selectors, and add one deployment-related enhancement (rollback, ConfigMap, probes, multi-stage Dockerfile, second microservice, or health endpoint).
+
+\textit{Covers: Unit 4 (Ansible), Unit 5 (Kubernetes). Maps to CO4, CO5.}
+& 10 \\
+\hline
+
+\end{longtable}
+\par}
+
+\newpage
+
+% ======================================================
+% ASSESSMENT RUBRICS
+% ======================================================
+\section*{Assessment Rubrics}
+{\sizeTwelve Evaluation for \textbf{each} 10-mark component will be based on the following rubrics.\par}
+
+\vspace{0.4cm}
+
+{\sizeTwelve
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+
+\textbf{Criteria} & \textbf{2 --- Good} & \textbf{1 --- Average} & \textbf{0 --- Poor} \\
+
+\hline
+\endhead
+Concept Understanding (2 marks) & Answers ``why'' questions correctly and immediately (e.g., webhook vs.\ polling, what a handler does, Deployment vs.\ ReplicaSet, why the chosen enhancement matters) & Gets the basic idea right but stumbles on follow-up questions or confuses related concepts & Cannot explain own pipeline; answers suggest it was copied or AI-generated without understanding \\
+\hline
+Core Implementation (2 marks) & Required pipeline (Git+Jenkins for Comp.\ 1 / Ansible+K8s+scaling for Comp.\ 2) runs end-to-end live, without intervention & Works but needs manual triggering, a workaround, or partial failure & Doesn't run at all during the demo; only screenshots are shown \\
+\hline
+Enhancement (2 marks) & At least one enhancement from Section 3/4's list implemented and demonstrated live, working correctly & Enhancement attempted but incomplete, or only explained without being runnable & No enhancement attempted \\
+\hline
+Analysis \& Interpretation (2 marks) & Explains build logs, scaling behaviour, or enhancement outcomes in own words; interprets output unprompted & Describes what happened but not why, or needs prompting to interpret output & No interpretation offered; treats commands as a checklist \\
+\hline
+Documentation \& Presentation (2 marks) & Report fully personalized  and confidently walks through the pipeline unprompted & Mostly complete report or needs guidance/prompting during the demo & Unedited template, mismatched screenshots, or cannot navigate own setup \\
+\hline
+\end{longtable}
+\par}
+
+\newpage
+
+% ======================================================
+% MARKS AWARDED TABLE
+% ======================================================
+\section*{Marks Awarded}
+
+\vspace{0.3cm}
+
+{\sizeTwelve
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|>{\centering\arraybackslash}p{1.0cm}|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{2.0cm}|>{\raggedright\arraybackslash}p{2.3cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{1.4cm}|}
+\hline
+\textbf{Sl. No} &
+\textbf{Concept Under- standing (2)} &
+\textbf{Core Imple- mentation (2)} &
+\textbf{Enhance- ment (2)} &
+\textbf{Analysis \& Interpre- tation (2)} &
+\textbf{Documen- tation \& Presenta- tion (2)} &
+\textbf{Total} \\
+\hline
+\parbox[c][1.1cm][c]{1.0cm}{\centering 1} & & & & & & \\
+\hline
+\parbox[c][1.1cm][c]{1.0cm}{\centering 2} & & & & & & \\
+\hline
+\multicolumn{6}{|c|}{\parbox[c][1.1cm][c]{13.0cm}{\centering\textbf{TOTAL MARKS}}} &
+\parbox[c][1.1cm][c]{1.4cm}{\centering} \\
+\hline
+\end{longtable}
+\par}
+
+\newpage
+
+% ======================================================
+% COMPONENT 1 FULL REPORT
+% ======================================================
+\section*{Component 1: CI/CD Pipeline using Git, Maven/Gradle and Jenkins}
+
+\subsection*{Abstract}
+\begin{studentnote}
+Rewrite this in your own words (2--3 sentences). Do not copy the text below verbatim --- summarize \textit{your} implementation, your app, and your specific tools.
+\end{studentnote}
+
+This activity demonstrates a basic Continuous Integration (CI) workflow used in real-world DevOps practice. A sample Java/Spring Boot application is placed under Git version control, built using Maven (or Gradle), and integrated into a Jenkins job that automatically pulls, builds, and reports on every code change. The goal is to understand how source control, build automation, and CI orchestration work together to reduce manual effort and catch integration errors early.
+
+\subsection*{Introduction}
+\begin{studentnote}
+Keep the conceptual explanation below, but add 1--2 sentences naming the specific app/language you actually used (e.g., ``In this activity, a Node.js Express service was used instead of Spring Boot...'').
+\end{studentnote}
+
+DevOps relies on tight integration between development and operations, and Continuous Integration is one of its foundational practices. Git provides distributed version control so multiple developers can work on branches without conflicts. Maven and Gradle automate the build lifecycle --- compiling code, managing dependencies, and packaging artifacts --- removing the need for manual, error-prone build steps. Jenkins ties these together by automatically triggering a build whenever new code is pushed, giving teams fast feedback on whether the codebase is in a working state. This component walks through setting up all three in a single working pipeline.
+
+\subsection*{Implementation}
+
+\subsubsection*{Development Environment}
+\begin{studentnote}
+Replace this list with what you \textit{actually} installed and used. Run \texttt{git --version}, \texttt{java -version}, etc. and list your real versions and OS.
+\end{studentnote}
+\begin{itemize}[nosep]
+    \item OS: Ubuntu 22.04 / Windows with WSL
+    \item Git 2.4x
+    \item JDK 17, Maven 3.9.x (or Gradle 8.x)
+    \item Jenkins 2.4x (installed locally or via Docker)
+    \item Sample app: Spring Boot ``Hello World'' REST service
+\end{itemize}
+
+\subsubsection*{Step 1: Git Repository and Branching}
+\begin{studentnote}
+Replace \texttt{<repo-url>} with your actual repository URL. Use your real branch/commit names, not the placeholders shown.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+git init devops-demo
+cd devops-demo
+git checkout -b feature/hello-endpoint
+# add source files
+git add .
+git commit -m "Add hello endpoint"
+git checkout main
+git merge feature/hello-endpoint
+git remote add origin <repo-url>
+git push -u origin main
+\end{lstlisting}
+
+\subsubsection*{Step 2: Maven Build Configuration (pom.xml excerpt)}
+\begin{studentnote}
+Replace with your actual \texttt{pom.xml} (or \texttt{build.gradle}) dependencies and plugin versions --- do not leave this generic example unchanged.
+\end{studentnote}
+\begin{lstlisting}[language=XML]
+<project>
+  <groupId>com.example</groupId>
+  <artifactId>devops-demo</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+\end{lstlisting}
+
+\textit{(If using Gradle instead, the equivalent dependency block goes in \texttt{build.gradle} using Groovy or Kotlin DSL, with \texttt{./gradlew build} as the build command.)}
+
+\subsubsection*{Step 3: Jenkins Pipeline (Jenkinsfile)}
+\begin{studentnote}
+Replace \texttt{<repo-url>} with your repo URL and \texttt{target/*.jar} with your actual artifact path/name. Add any extra stages you used.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: '<repo-url>'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Post-Build') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+    }
+    triggers {
+        pollSCM('* * * * *')   // or use a GitHub webhook
+    }
+}
+\end{lstlisting}
+
+\subsubsection*{Step 4: CI Enhancement}
+\begin{studentnote}
+Choose ONE of the options below and implement it for real, then replace this example with your actual code and a short explanation of why you picked it.
+\end{studentnote}
+
+{\sizeTwelve
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4.2cm}|>{\raggedright\arraybackslash}p{9.2cm}|}
+\hline
+\textbf{Enhancement} & \textbf{What to do} \\
+\hline
+\endhead
+Automated tests in CI & Add a Test stage in your Jenkinsfile that runs 2--3 unit tests (JUnit for Java, pytest for Python) before the build stage \\
+\hline
+Image/build versioning & Tag your build artifact or Docker image with the Git commit SHA or Jenkins build number instead of a fixed version \\
+\hline
+GitHub Actions alongside Jenkins & Add a simple \texttt{.github/workflows/ci.yml} that also builds and tests your app on every push \\
+\hline
+\end{longtable}
+\par}
+
+\subsubsection*{Description of the Activity}
+\begin{studentnote}
+Rewrite this to describe what \textit{you} did and observed, including any problems you hit and how you solved them. This is where Analysis \& Interpretation marks are earned.
+\end{studentnote}
+
+The Jenkins job is configured under \textbf{Source Code Management} to point to the Git repository. A \textbf{Build Trigger} (SCM polling or webhook) ensures the pipeline runs automatically on every push. The pipeline has three stages: checking out code, running the Maven build, and archiving the resulting JAR as a \textbf{post-build action}. This mirrors a real CI setup where every commit is automatically validated, catching build failures before they reach later stages of the pipeline.
+
+\subsection*{Results}
+\begin{studentnote}
+Replace the placeholder line below with real \texttt{\textbackslash includegraphics} commands for each screenshot: Git branch/commit history, Jenkins job configuration, successful build console output, archived artifact, and your CI enhancement working.
+\end{studentnote}
+
+\textit{[Insert screenshots here: Jenkins job configuration page, successful build console output, archived artifact, Git commit/branch history, CI enhancement evidence]}
+
+\begin{lstlisting}[language=bash]
+% Example of how to insert a real screenshot:
+% \includegraphics[width=0.9\linewidth]{screenshots/jenkins_build_success.png}
+\end{lstlisting}
+
+\subsection*{Conclusion}
+\begin{studentnote}
+Write 2--3 sentences reflecting on what \textit{you} personally learned --- do not copy the generic conclusion below.
+\end{studentnote}
+
+The exercise shows how Git, Maven/Gradle, and Jenkins combine to automate the build-and-verify stage of the DevOps pipeline, reducing manual intervention and giving immediate feedback on code health.
+
+\newpage
+
+% ======================================================
+% COMPONENT 2 FULL REPORT
+% ======================================================
+\section*{Component 2: Configuration Management with Ansible and Deployment on Kubernetes}
+
+\subsection*{Abstract}
+\begin{studentnote}
+Rewrite in your own words, describing your actual playbook and deployment, not the generic version below.
+\end{studentnote}
+
+This activity extends the application from Component 1 into a fully automated deployment. An Ansible playbook provisions the target environment, and the application is containerized and deployed on a Kubernetes cluster using Deployment and Service manifests, with scaling demonstrated through replica sets.
+
+\subsection*{Introduction}
+\begin{studentnote}
+Keep the conceptual explanation, but mention your specific setup (e.g., which cluster tool --- Minikube or Kind --- and what host you configured with Ansible).
+\end{studentnote}
+
+Once code is built, it must be reliably deployed and run at scale. Ansible is an agentless configuration management tool that uses YAML playbooks to describe the desired state of a server (installed packages, files, running services), making infrastructure changes repeatable and version-controlled. Kubernetes takes this further by orchestrating containerized applications across a cluster, automatically handling scheduling, scaling, networking, and self-healing. This component demonstrates both: using Ansible to configure a host, and Kubernetes to run and scale the containerized application.
+
+\subsection*{Implementation}
+
+\subsubsection*{Development Environment}
+\begin{studentnote}
+Update with your actual Ansible/Docker/Kubernetes tool versions and cluster type.
+\end{studentnote}
+\begin{itemize}[nosep]
+    \item Ansible 2.16 (control node) with a managed host/VM
+    \item Docker 24.x for containerization
+    \item Minikube or Kind for the local Kubernetes cluster
+    \item kubectl CLI
+\end{itemize}
+
+\subsubsection*{Step 1: Ansible Playbook}
+\begin{studentnote}
+Replace with your actual playbook: your real hosts, variables (don't just keep \texttt{app\_port: 8080} if yours differs), tasks, and role name.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+---
+- name: Configure application server
+  hosts: appservers
+  become: yes
+  vars:
+    app_port: 8080
+  roles:
+    - common
+  tasks:
+    - name: Install Java
+      apt:
+        name: openjdk-17-jre
+        state: present
+
+    - name: Copy application JAR
+      copy:
+        src: target/devops-demo.jar
+        dest: /opt/app/devops-demo.jar
+
+    - name: Create systemd service
+      template:
+        src: app.service.j2
+        dest: /etc/systemd/system/devops-demo.service
+      notify: restart app
+
+  handlers:
+    - name: restart app
+      systemd:
+        name: devops-demo
+        state: restarted
+        enabled: yes
+\end{lstlisting}
+
+\textit{The \texttt{common} role (created via \texttt{ansible-galaxy init common}) handles baseline setup such as updating packages and creating the application directory, showing reusable role structuring.}
+
+\subsubsection*{Step 2: Dockerfile}
+\begin{studentnote}
+Replace with your actual base image and artifact name/path.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+FROM eclipse-temurin:17-jre
+COPY target/devops-demo.jar /app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+\end{lstlisting}
+
+\subsubsection*{Step 3: Kubernetes Deployment and Service}
+\begin{studentnote}
+Replace \texttt{devops-demo} and \texttt{devops-demo:1.0} with your actual app/image name and tag throughout.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-demo
+  labels:
+    app: devops-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: devops-demo
+  template:
+    metadata:
+      labels:
+        app: devops-demo
+    spec:
+      containers:
+        - name: devops-demo
+          image: devops-demo:1.0
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-demo-service
+spec:
+  type: NodePort
+  selector:
+    app: devops-demo
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+\end{lstlisting}
+
+\subsubsection*{Step 4: Deploy and Scale}
+\begin{studentnote}
+Run these commands yourself and paste your real terminal output as screenshots in the Results section below --- do not just leave the commands unchanged.
+\end{studentnote}
+\begin{lstlisting}[language=bash]
+kubectl apply -f deployment.yaml
+kubectl get pods -l app=devops-demo
+kubectl scale deployment devops-demo --replicas=5
+kubectl get pods -l app=devops-demo
+\end{lstlisting}
+
+\subsubsection*{Step 5: Deployment Enhancement }
+\begin{studentnote}
+Choose ONE of the options below and implement it for real, then replace this example with your actual code and a short explanation of why you picked it.
+\end{studentnote}
+
+{\sizeTwelve
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4.4cm}|>{\raggedright\arraybackslash}p{9.0cm}|}
+\hline
+\textbf{Enhancement} & \textbf{What to do} \\
+\hline
+\endhead
+Rollback demo & Deploy a working version, intentionally push a broken change, then run \texttt{kubectl rollout undo deployment/<name>} and show the app recover \\
+\hline
+ConfigMap for settings & Move at least one hardcoded value (like the app port) into a Kubernetes ConfigMap instead of hardcoding it in the YAML \\
+\hline
+Liveness/readiness probes & Add a \texttt{livenessProbe} and \texttt{readinessProbe} block to your Deployment YAML pointing at your app's root or a \texttt{/health} path \\
+\hline
+Multi-stage Dockerfile & Split your Dockerfile into a build stage and a slim runtime stage so the final image doesn't carry build tools \\
+\hline
+Second microservice & Add one more small service that your main app calls, and deploy both on the cluster \\
+\hline
+Health/metrics endpoint & Expose a simple \texttt{/health} endpoint and explain in your report what a tool like Prometheus would scrape from it \\
+\hline
+\end{longtable}
+\par}
+
+\subsubsection*{Description of the Activity}
+\begin{studentnote}
+Rewrite to describe what you actually observed --- e.g., how long scaling took, any pod failures, what the service URL/response looked like, and how your enhancement behaved.
+\end{studentnote}
+
+The Ansible playbook targets a group of hosts defined in an inventory file, uses variables for configurable values (like the port), a role for reusable common setup, and a handler to restart the service only when the JAR changes --- demonstrating idempotent configuration management. On the Kubernetes side, the Deployment manages a ReplicaSet of Pods labeled \texttt{app: devops-demo}; the Service uses a matching selector to route traffic to those Pods regardless of which node they run on. Scaling is demonstrated by changing the replica count and observing Kubernetes reconcile the running Pods to match.
+
+\subsection*{Results}
+\begin{studentnote}
+Replace the placeholder line below with real \texttt{\textbackslash includegraphics} commands for: \texttt{ansible-playbook} run output, \texttt{kubectl get pods} before/after scaling, \texttt{kubectl get svc} output, the app responding (curl/browser), and your deployment enhancement working.
+\end{studentnote}
+
+\textit{[Insert screenshots here: \texttt{ansible-playbook} run output, \texttt{kubectl get pods} before and after scaling, \texttt{kubectl get svc} showing the running service, application response via curl/browser, deployment enhancement evidence]}
+
+\begin{lstlisting}[language=bash]
+% Example of how to insert a real screenshot:
+% \includegraphics[width=0.9\linewidth]{screenshots/kubectl_scaling_result.png}
+\end{lstlisting}
+
+\subsection*{Conclusion}
+\begin{studentnote}
+Write your own reflection here --- do not copy the generic conclusion below.
+\end{studentnote}
+
+This activity demonstrates the "last mile" of the DevOps pipeline --- moving a built artifact into a running, scalable, self-healing deployment --- using Ansible for configuration management and Kubernetes for orchestration.
+
+\newpage
+
+% ======================================================
+% REFERENCES
+% ======================================================
+\section*{References}
+
+\begin{enumerate}[nosep]
+    \item Jennifer Davis and Katherine Daniels, \textit{Effective DevOps}, 1st Edition, Shroff/O'Reilly Publications, 2021.
+    \item Sanjeev Sharma, \textit{The DevOps Adoption Playbook: A Guide to Adopting DevOps in a Multi-Speed IT Enterprise}, 1st Edition.
+    \item Official Git Documentation -- \url{https://git-scm.com/doc}
+    \item Official Jenkins Documentation -- \url{https://www.jenkins.io/doc/}
+    \item Official Ansible Documentation -- \url{https://docs.ansible.com/}
+    \item Official Kubernetes Documentation -- \url{https://kubernetes.io/docs/}
+\end{enumerate}
+
+\end{document}

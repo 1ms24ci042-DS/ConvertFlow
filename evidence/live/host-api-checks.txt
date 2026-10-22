@@ -1,0 +1,19 @@
+GET /health
+HTTP 200
+{"status":"UP"}
+
+GET /convert?from=km&to=mi&value=5
+HTTP 200
+{"from":"km","to":"mi","value":5.0,"result":3.1068559611866697}
+
+GET /convert?from=c&to=f&value=0
+HTTP 200
+{"from":"c","to":"f","value":0.0,"result":32.0}
+
+GET /convert?from=m&to=kg&value=5
+HTTP 400
+{"error":"Unsupported or incompatible units"}
+
+GET /missing
+HTTP 404
+{"error":"Endpoint not found"}

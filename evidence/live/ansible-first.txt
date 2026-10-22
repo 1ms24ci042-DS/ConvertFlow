@@ -1,0 +1,35 @@
+
+PLAY [Configure ConvertFlow on an Ubuntu systemd host] *************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [convertflow : Install Java runtime] **************************************
+changed: [localhost]
+
+TASK [convertflow : Create application user] ***********************************
+changed: [localhost]
+
+TASK [convertflow : Create application directory] ******************************
+changed: [localhost]
+
+TASK [convertflow : Copy built application] ************************************
+changed: [localhost]
+
+TASK [convertflow : Configure service] *****************************************
+changed: [localhost]
+
+TASK [convertflow : Run pending service handlers] ******************************
+
+RUNNING HANDLER [convertflow : Restart ConvertFlow] ****************************
+changed: [localhost]
+
+TASK [convertflow : Ensure service is enabled and started] *********************
+ok: [localhost]
+
+TASK [convertflow : Verify health endpoint] ************************************
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=9    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

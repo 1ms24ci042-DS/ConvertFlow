@@ -1,0 +1,160 @@
+Started by user admin
+Obtained Jenkinsfile from git https://github.com/1ms24ci042-DS/ConvertFlow.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /home/sathwika/.jenkins/workspace/ConvertFlow
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential convertflow-github
+Cloning the remote Git repository
+Cloning repository https://github.com/1ms24ci042-DS/ConvertFlow.git
+ > git init /home/sathwika/.jenkins/workspace/ConvertFlow # timeout=10
+Fetching upstream changes from https://github.com/1ms24ci042-DS/ConvertFlow.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+using GIT_ASKPASS to set credentials Private ConvertFlow repository access
+ > git fetch --tags --force --progress -- https://github.com/1ms24ci042-DS/ConvertFlow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/1ms24ci042-DS/ConvertFlow.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 # timeout=10
+Commit message: "Verify Ubuntu deployment and exact Kubernetes readiness after scaling"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-10-22T15:01:42.850Z] Selected Git installation does not exist. Using Default
+[2026-10-22T15:01:42.850Z] The recommended git tool is: NONE
+[2026-10-22T15:01:42.851Z] using credential convertflow-github
+[2026-10-22T15:01:42.854Z]  > git rev-parse --resolve-git-dir /home/sathwika/.jenkins/workspace/ConvertFlow/.git # timeout=10
+[2026-10-22T15:01:42.857Z] Fetching changes from the remote Git repository
+[2026-10-22T15:01:42.859Z]  > git config remote.origin.url https://github.com/1ms24ci042-DS/ConvertFlow.git # timeout=10
+[2026-10-22T15:01:42.863Z] Fetching upstream changes from https://github.com/1ms24ci042-DS/ConvertFlow.git
+[2026-10-22T15:01:42.863Z]  > git --version # timeout=10
+[2026-10-22T15:01:42.867Z]  > git --version # 'git version 2.43.0'
+[2026-10-22T15:01:42.868Z] using GIT_ASKPASS to set credentials Private ConvertFlow repository access
+[2026-10-22T15:01:42.873Z]  > git fetch --tags --force --progress -- https://github.com/1ms24ci042-DS/ConvertFlow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-10-22T15:01:43.946Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-10-22T15:01:43.953Z] Checking out Revision 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 (refs/remotes/origin/main)
+[2026-10-22T15:01:43.953Z]  > git config core.sparsecheckout # timeout=10
+[2026-10-22T15:01:43.959Z]  > git checkout -f 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 # timeout=10
+[2026-10-22T15:01:43.968Z] Commit message: "Verify Ubuntu deployment and exact Kubernetes readiness after scaling"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
+[2026-10-22T15:01:44.305Z] + mvn -B clean test
+[2026-10-22T15:01:45.217Z] [INFO] Scanning for projects...
+[2026-10-22T15:01:45.217Z] [INFO] 
+[2026-10-22T15:01:45.217Z] [INFO] -----------------------< in.ramaiah:convertflow >-----------------------
+[2026-10-22T15:01:45.217Z] [INFO] Building convertflow 1.0.0
+[2026-10-22T15:01:45.217Z] [INFO]   from pom.xml
+[2026-10-22T15:01:45.217Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-22T15:01:45.217Z] [INFO] 
+[2026-10-22T15:01:45.217Z] [INFO] --- clean:3.2.0:clean (default-clean) @ convertflow ---
+[2026-10-22T15:01:45.217Z] [INFO] 
+[2026-10-22T15:01:45.217Z] [INFO] --- resources:3.3.1:resources (default-resources) @ convertflow ---
+[2026-10-22T15:01:45.217Z] [INFO] skip non existing resourceDirectory /home/sathwika/.jenkins/workspace/ConvertFlow/src/main/resources
+[2026-10-22T15:01:45.217Z] [INFO] 
+[2026-10-22T15:01:45.217Z] [INFO] --- compiler:3.13.0:compile (default-compile) @ convertflow ---
+[2026-10-22T15:01:45.468Z] [INFO] Recompiling the module because of changed source code.
+[2026-10-22T15:01:45.468Z] [INFO] Compiling 2 source files with javac [debug release 17] to target/classes
+[2026-10-22T15:01:45.719Z] [INFO] 
+[2026-10-22T15:01:45.719Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ convertflow ---
+[2026-10-22T15:01:45.719Z] [INFO] skip non existing resourceDirectory /home/sathwika/.jenkins/workspace/ConvertFlow/src/test/resources
+[2026-10-22T15:01:45.719Z] [INFO] 
+[2026-10-22T15:01:45.719Z] [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ convertflow ---
+[2026-10-22T15:01:45.719Z] [INFO] Recompiling the module because of changed dependency.
+[2026-10-22T15:01:45.719Z] [INFO] Compiling 2 source files with javac [debug release 17] to target/test-classes
+[2026-10-22T15:01:45.970Z] [INFO] 
+[2026-10-22T15:01:45.970Z] [INFO] --- surefire:3.5.2:test (default-test) @ convertflow ---
+[2026-10-22T15:01:45.970Z] [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[2026-10-22T15:01:46.220Z] [INFO] 
+[2026-10-22T15:01:46.220Z] [INFO] -------------------------------------------------------
+[2026-10-22T15:01:46.220Z] [INFO]  T E S T S
+[2026-10-22T15:01:46.220Z] [INFO] -------------------------------------------------------
+[2026-10-22T15:01:46.471Z] [INFO] Running in.ramaiah.convertflow.ConverterTest
+[2026-10-22T15:01:46.471Z] [INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in in.ramaiah.convertflow.ConverterTest
+[2026-10-22T15:01:46.471Z] [INFO] Running in.ramaiah.convertflow.AppTest
+[2026-10-22T15:01:47.024Z] [INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.514 s -- in in.ramaiah.convertflow.AppTest
+[2026-10-22T15:01:47.276Z] [INFO] 
+[2026-10-22T15:01:47.276Z] [INFO] Results:
+[2026-10-22T15:01:47.276Z] [INFO] 
+[2026-10-22T15:01:47.276Z] [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
+[2026-10-22T15:01:47.277Z] [INFO] 
+[2026-10-22T15:01:47.277Z] [INFO] ------------------------------------------------------------------------
+[2026-10-22T15:01:47.277Z] [INFO] BUILD SUCCESS
+[2026-10-22T15:01:47.277Z] [INFO] ------------------------------------------------------------------------
+[2026-10-22T15:01:47.277Z] [INFO] Total time:  2.340 s
+[2026-10-22T15:01:47.277Z] [INFO] Finished at: 2026-10-22T20:31:47+05:30
+[2026-10-22T15:01:47.277Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Package)
+[Pipeline] sh
+[2026-10-22T15:01:47.600Z] + mvn -B -DskipTests package
+[2026-10-22T15:01:48.512Z] [INFO] Scanning for projects...
+[2026-10-22T15:01:48.512Z] [INFO] 
+[2026-10-22T15:01:48.512Z] [INFO] -----------------------< in.ramaiah:convertflow >-----------------------
+[2026-10-22T15:01:48.512Z] [INFO] Building convertflow 1.0.0
+[2026-10-22T15:01:48.512Z] [INFO]   from pom.xml
+[2026-10-22T15:01:48.512Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-22T15:01:48.512Z] [INFO] 
+[2026-10-22T15:01:48.512Z] [INFO] --- resources:3.3.1:resources (default-resources) @ convertflow ---
+[2026-10-22T15:01:48.763Z] [INFO] skip non existing resourceDirectory /home/sathwika/.jenkins/workspace/ConvertFlow/src/main/resources
+[2026-10-22T15:01:48.763Z] [INFO] 
+[2026-10-22T15:01:48.763Z] [INFO] --- compiler:3.13.0:compile (default-compile) @ convertflow ---
+[2026-10-22T15:01:48.763Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-22T15:01:48.763Z] [INFO] 
+[2026-10-22T15:01:48.763Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ convertflow ---
+[2026-10-22T15:01:48.763Z] [INFO] skip non existing resourceDirectory /home/sathwika/.jenkins/workspace/ConvertFlow/src/test/resources
+[2026-10-22T15:01:48.763Z] [INFO] 
+[2026-10-22T15:01:48.763Z] [INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ convertflow ---
+[2026-10-22T15:01:48.763Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-22T15:01:48.763Z] [INFO] 
+[2026-10-22T15:01:48.763Z] [INFO] --- surefire:3.5.2:test (default-test) @ convertflow ---
+[2026-10-22T15:01:49.014Z] [INFO] Tests are skipped.
+[2026-10-22T15:01:49.014Z] [INFO] 
+[2026-10-22T15:01:49.014Z] [INFO] --- jar:3.4.2:jar (default-jar) @ convertflow ---
+[2026-10-22T15:01:49.014Z] [INFO] Building jar: /home/sathwika/.jenkins/workspace/ConvertFlow/target/convertflow.jar
+[2026-10-22T15:01:49.265Z] [INFO] ------------------------------------------------------------------------
+[2026-10-22T15:01:49.265Z] [INFO] BUILD SUCCESS
+[2026-10-22T15:01:49.265Z] [INFO] ------------------------------------------------------------------------
+[2026-10-22T15:01:49.265Z] [INFO] Total time:  0.894 s
+[2026-10-22T15:01:49.265Z] [INFO] Finished at: 2026-10-22T20:31:49+05:30
+[2026-10-22T15:01:49.265Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] junit
+[2026-10-22T15:01:49.447Z] Recording test results
+[2026-10-22T15:01:49.517Z] [Checks API] No suitable checks publisher found.
+[Pipeline] archiveArtifacts
+[2026-10-22T15:01:49.545Z] Archiving artifacts
+[2026-10-22T15:01:49.549Z] Recording fingerprints
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

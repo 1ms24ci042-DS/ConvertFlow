@@ -11,3 +11,5 @@ Dockerfile text eol=lf
 *.pdf binary
 *.docx binary
 *.zip binary
+# Preserve captured output byte-for-byte, including tool-emitted whitespace.
+evidence/live/** -text -whitespace

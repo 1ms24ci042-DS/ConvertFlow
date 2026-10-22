@@ -1,0 +1,21 @@
+[
+  "report/screenshots/ubuntu-git-graph.png",
+  "report/screenshots/ubuntu-maven-summary.png",
+  "report/screenshots/ubuntu-jenkins-scm.png",
+  "report/screenshots/ubuntu-jenkins-repository.png",
+  "report/screenshots/ubuntu-jenkins-polling.png",
+  "report/screenshots/ubuntu-jenkins-auto-build.png",
+  "report/screenshots/ubuntu-jenkins-auto-tests.png",
+  "report/screenshots/ubuntu-jenkins-auto-console.png",
+  "report/screenshots/ubuntu-ansible-recap-first.png",
+  "report/screenshots/ubuntu-ansible-recap-second.png",
+  "report/screenshots/ubuntu-systemd.png",
+  "report/screenshots/ubuntu-docker-build-summary.png",
+  "report/screenshots/ubuntu-docker-api.png",
+  "report/screenshots/ubuntu-kubernetes-3.png",
+  "report/screenshots/ubuntu-kubernetes-5.png",
+  "report/screenshots/ubuntu-kubernetes-down-3.png",
+  "report/screenshots/ubuntu-kubernetes-service.png",
+  "report/screenshots/ubuntu-kubernetes-api.png",
+  "report/screenshots/ubuntu-kubernetes-probes.png"
+]

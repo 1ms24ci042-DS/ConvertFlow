@@ -1,0 +1,11 @@
+NAME                              READY   STATUS    RESTARTS   AGE     IP           NODE                        NOMINATED NODE   READINESS GATES
+pod/convertflow-dbf888cb9-b5z26   1/1     Running   0          4m43s   10.244.0.6   convertflow-control-plane   <none>           <none>
+pod/convertflow-dbf888cb9-q6sng   1/1     Running   0          4m43s   10.244.0.7   convertflow-control-plane   <none>           <none>
+pod/convertflow-dbf888cb9-wtx7q   1/1     Running   0          4m43s   10.244.0.5   convertflow-control-plane   <none>           <none>
+
+NAME                                    DESIRED   CURRENT   READY   AGE     CONTAINERS    IMAGES              SELECTOR
+replicaset.apps/convertflow-dbf888cb9   3         3         3       4m43s   convertflow   convertflow:1.0.0   app=convertflow,pod-template-hash=dbf888cb9
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE     SELECTOR
+service/convertflow   NodePort    10.96.133.255   <none>        8080:30080/TCP   4m43s   app=convertflow
+service/kubernetes    ClusterIP   10.96.0.1       <none>        443/TCP          6m54s   <none>

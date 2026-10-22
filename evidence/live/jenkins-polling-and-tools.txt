@@ -1,0 +1,32 @@
+200 Executor label: linux
+Maven PATH: /home/sathwika/Downloads/devops-project/2026-10-22/i-x20/work/tools/maven/apache-maven-3.9.9/bin
+Plugins: [[git, 5.11.0, true], [junit, 1442.vb_b_a_467df2767, true], [timestamper, 1.30, true], [workflow-aggregator, 608.v67378e9d3db_1, true]]
+Polling schedule: H/2 * * * *
+Started on Oct 22, 2026, 8:35:00 PM
+Using strategy: Default
+[poll] Last Built Revision: Revision 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 (refs/remotes/origin/main)
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential convertflow-github
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+using GIT_ASKPASS to set credentials Private ConvertFlow repository access
+ > git ls-remote -h -- https://github.com/1ms24ci042-DS/ConvertFlow.git # timeout=10
+Found 2 remote heads on https://github.com/1ms24ci042-DS/ConvertFlow.git
+[poll] Latest remote head revision on refs/heads/main is: bb4ffa7bd2b27d05dd86a60d867639fa87f4a539
+Using strategy: Default
+[poll] Last Built Revision: Revision 1f1ac78b96019d687d9e8a5d1e24c7c5994b95b4 (refs/remotes/origin/main)
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+using credential convertflow-github
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+using GIT_ASKPASS to set credentials Private ConvertFlow repository access
+ > git ls-remote -h -- https://github.com/1ms24ci042-DS/ConvertFlow.git # timeout=10
+Found 2 remote heads on https://github.com/1ms24ci042-DS/ConvertFlow.git
+[poll] Latest remote head revision on refs/heads/main is: bb4ffa7bd2b27d05dd86a60d867639fa87f4a539
+Done. Took 2.1 sec
+Changes found
+
+Result: [hudson.triggers.SCMTrigger@6cc68f51[H/2 * * * *]]
+
