@@ -3,3 +3,10 @@ target/
 .vscode/
 *.log
 evidence/generated/
+
+# Generated submission archives and report build intermediates
+submission/
+report/*.aux
+report/*.out
+report/*.toc
+__pycache__/

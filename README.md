@@ -1,63 +1,61 @@
-# ConvertFlow - DevOps project
+# ConvertFlow — DevOps assignment
 
-**Dhanekula Sathwika | 1MS24CI042 | 25CIAEC59**
+**Dhanekula Sathwika · 1MS24CI042 · DevOps 25CIAEC59**
 
-A stateless Java 17 REST API demonstrating a Maven/Jenkins CI pipeline, Ansible server configuration, and Docker/Kubernetes deployment. No database or external runtime libraries are required.
+Repository: https://github.com/1ms24ci042-DS/ConvertFlow (private).
 
-## Run the application
+A stateless Java REST API for length, mass, and temperature conversion. Java 17 bytecode runs on JDK 17 or newer; the Ubuntu build uses OpenJDK 21 and bundled Maven 3.9.9. JUnit Jupiter 5.11.4 provides 15 automated tests.
 
-Install JDK 17+ and Maven 3.9+, then run from this directory:
+## Build and API
 
-```sh
-mvn clean verify
+```bash
+mvn -B clean verify
 java -jar target/convertflow.jar
 curl http://localhost:8080/health
 curl 'http://localhost:8080/convert?from=km&to=mi&value=5'
 ```
 
-Routes: GET `/` (metadata), `/health` (health), `/convert?from=UNIT&to=UNIT&value=NUMBER` (conversion). Units: length m/km/mi/ft; mass kg/g/lb; temperature c/f/k. Invalid input returns HTTP 400, unknown routes 404, unsupported methods 405. APP_PORT configures the listening port. Unit names are lowercase. Health is a JSON status endpoint, not a Prometheus metrics endpoint.
+GET `/` gives metadata; `/health` returns `{"status":"UP"}`; `/convert` accepts lowercase units (m/km/mi/ft, kg/g/lb, c/f/k). Invalid requests return 400, unknown routes 404, and unsupported methods 405. `APP_PORT` sets the listening port. The health endpoint is not a Prometheus metrics endpoint.
 
-## Git and hosting
+## Verified Ubuntu deployment
 
-The supplied local repository contains a main branch and a retained feature branch with a real merge commit. Publish using your own GitHub/GitLab account: create an empty repository, add its URL as origin, then `git push -u origin main` and `git push origin feature/conversion-api`. Update repo_link.txt and the report with that actual URL. Add the course coordinator as collaborator using their correct account; no account has been guessed.
+Fresh execution logs are in `evidence/live/`. The older top-level evidence files and old rendered log images came from the supplied workspace and are not used to establish Ubuntu results. `evidence/PROVENANCE.md` explains the evidence sources.
 
-## Jenkins
+- Maven clean verify: 15 tests, zero failures/errors/skips.
+- Ansible role: first run changed six tasks; second run changed zero, with zero failures. Service `convertflow` runs as an unprivileged user from `/opt/convertflow`.
+- Docker: multi-stage image `convertflow:1.0.0`, non-root UID/GID 10001, working health and conversion endpoints.
+- Kind v0.27.0, Kubernetes v1.32.2, kubectl v1.32.2: actual scaling 3 -> 5 -> 3, with every recorded Pod Ready and no terminating Pods at each observation.
+- ConfigMap injects APP_PORT=8080; readiness and liveness probes use `/health`; Service and Deployment selectors match `app=convertflow`.
 
-Use a Linux Jenkins agent labelled `linux` with Git, JDK 17, Maven 3.9+ on PATH. Install Pipeline, Git, JUnit, and Timestamper plugins. Create Pipeline from SCM, select Git, enter your published repository URL, choose branch `*/main`, script path `Jenkinsfile`. Run once to establish SCM polling. The Jenkinsfile checks for changes every two minutes, runs tests, packages the JAR only after tests pass, publishes JUnit results, and archives target/convertflow.jar. Push a subsequent change and capture the automatic run. A Jenkinsfile alone is not evidence that a job ran. GitHub Actions is supplementary and does not replace required Jenkins evidence.
+The laptop keeps the systemd app on **8080**, Docker on **8081**, Jenkins on **8082**, and Kubernetes Service forwarding on **8083** so the demonstrations coexist. Port-forward is an active process and must be restarted after reboot:
 
-## Ansible
-
-Use an Ubuntu VM or WSL Ubuntu with systemd enabled. Install ansible-core; build the JAR first. From `ansible/`:
-
-```sh
-ansible-playbook -i inventory.ini playbook.yml --ask-become-pass
-ansible-playbook -i inventory.ini playbook.yml --ask-become-pass
-curl http://localhost:8080/health
+```bash
+kubectl --context kind-convertflow port-forward --address 127.0.0.1 service/convertflow 8083:8080
 ```
 
-The second playbook run should report no configuration changes. The role installs Java, creates an unprivileged service account, copies the JAR, templates a systemd unit, and uses a restart handler only when files change. Inventory defaults to the local Linux control node. To use a remote Ubuntu VM, replace localhost with its actual SSH inventory and build/copy from the control node. This playbook is for a systemd host; an ordinary Docker container is not a substitute.
+## Jenkins Pipeline from SCM
 
-## Docker and Kubernetes
+Job: http://localhost:8082/job/ConvertFlow/
 
-Install Docker, Kind, kubectl and Bash on the deployment host. With Docker running:
+The job uses the private GitHub repository, branch `*/main`, script `Jenkinsfile`, and a Linux executor labelled `linux`. Pipeline, Git, JUnit and Timestamper plugins are installed. Maven 3.9.9 is on the executor PATH. GitHub access is stored encrypted by Jenkins; no token is part of this repository. The existing administrator secret remains local to Jenkins.
 
-```sh
-docker build -t convertflow:1.0.0 .
-docker run --rm -p 8081:8080 convertflow:1.0.0
-# In another terminal: curl http://localhost:8081/health
-# Stop that container before port-forwarding below.
+The Jenkinsfile polls SCM every two minutes (`H/2 * * * *`). The Test stage gates Package; post-build actions publish JUnit results and archive/fingerprint `target/convertflow.jar`. The first build establishes the polling baseline; subsequent pushed commits are discovered by the scheduler. `evidence/live/jenkins-*` records actual build causes, commits, console output, test results and archive metadata.
+
+## Ansible and cluster reproduction
+
+Review `scripts/setup-ubuntu.sh` and run with Bash if the Ubuntu tools are absent. Docker group membership is privileged; the script explicitly adds the desktop user to that group.
+
+```bash
+bash scripts/deploy-ubuntu.sh
 bash scripts/deploy-kind.sh
-kubectl --context kind-convertflow port-forward service/convertflow 8081:8080
-# In another terminal:
-curl 'http://localhost:8081/convert?from=km&to=mi&value=5'
 ```
 
-The script creates a named cluster, loads the local image, applies the ConfigMap/Deployment/Service, and records scaling 3 -> 5 -> 3. It does not delete an existing cluster. Kind NodePort access differs by host, so port-forward is the documented Windows-compatible access path. Use `kubectl --context kind-convertflow get rs -l app=convertflow` to show the ReplicaSet. Readiness controls routing eligibility; liveness restarts an unhealthy container. The Docker image uses a build stage and a non-root runtime. APP_PORT and the container/probe/service ports must stay consistent if changed.
+The Ubuntu script requests sudo locally, checks port ownership, stops only the known manual JAR if needed, and runs Ansible twice. The role installs Java, creates the service user and directory, copies the built JAR, templates the systemd unit, and notifies a restart handler when files change. A repeat run checks idempotence and health.
 
-## Report and evidence
+The cluster script builds the image, reuses or creates `convertflow`, loads the image, applies the ConfigMap/Deployment/Service, and verifies exact Ready Pod counts at 3, 5, and 3. It pins the node version to match kubectl. It retains the cluster and writes real generated logs. No database or PVC is needed for this stateless API. Scaling is manual, not autoscaling.
 
-The report uses the supplied institutional structure. Local build/test evidence is included where actually obtained. Jenkins, Docker, Ansible and Kubernetes results must be captured on a running environment; no successful deployment or fabricated screenshot is claimed. Add screenshots listed in evidence/CHECKLIST.md, enter the final repository URL, and obtain required signatures before submission. The certificate signature lines are intentionally blank.
+## Report and submission
 
-## Cleanup (only after your demo)
+The institutional template is preserved as `report/original_template.tex`. Final reports and the submission archive are under `submission/`; `report/main.tex` is the personalized source. Both components contain their own Abstract, Introduction, Implementation, Enhancement, Results, Conclusion and References. Figures are actual browser screenshots of Jenkins, application responses, or fresh log files, with their origin stated in captions. No terminal image is synthesized. Signature and marks fields remain blank. No collaborator is invited, per the student's instruction.
 
-`kind delete cluster --name convertflow` removes the demo cluster. On the Ansible host, stop/disable the service with `sudo systemctl disable --now convertflow` if no longer needed.
+Keep the working services and cluster for the demo. Cleanup is intentionally deferred.
