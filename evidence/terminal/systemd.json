@@ -1,0 +1,12 @@
+{
+  "name": "systemd",
+  "commands": [
+    "date -Iseconds",
+    "systemctl --no-pager status convertflow | head -n 10",
+    "curl -fsS http://127.0.0.1:8080/health; printf '\n'"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:41:56.725684+05:30",
+  "screenshot": "report/screenshots/terminal-systemd.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

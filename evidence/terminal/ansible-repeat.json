@@ -1,0 +1,13 @@
+{
+  "name": "ansible-repeat",
+  "commands": [
+    "date -Iseconds",
+    "sudo -v",
+    "ansible-playbook -i ansible/inventory.ini ansible/playbook.yml > evidence/terminal/ansible-repeat.txt 2>&1",
+    "tail -n 18 evidence/terminal/ansible-repeat.txt"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:45:48.906143+05:30",
+  "screenshot": "report/screenshots/terminal-ansible-repeat.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

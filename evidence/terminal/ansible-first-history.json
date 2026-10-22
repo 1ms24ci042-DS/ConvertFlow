@@ -1,0 +1,13 @@
+{
+  "name": "ansible-first-history",
+  "commands": [
+    "date -Iseconds",
+    "printf 'HISTORICAL LOG: first deployment, 22 October 2026\nNot a new first run. Original file and handler output follow.\n'",
+    "stat -c '%y %n' evidence/live/ansible-first.txt",
+    "tail -n 18 evidence/live/ansible-first.txt"
+  ],
+  "historical_log_review": true,
+  "captured_at": "2026-10-22T21:41:52.571214+05:30",
+  "screenshot": "report/screenshots/terminal-ansible-first-history.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

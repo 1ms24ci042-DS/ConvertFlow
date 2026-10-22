@@ -1,0 +1,31 @@
+Script started on 2026-10-22 21:41:48+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-ansible-first-history-20261022-214148/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/8" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:41:48+05:30
++ printf 'HISTORICAL LOG: first deployment, 22 October 2026
+Not a new first run. Original file and handler output follow.
+'
+HISTORICAL LOG: first deployment, 22 October 2026
+Not a new first run. Original file and handler output follow.
++ stat -c '%y %n' evidence/live/ansible-first.txt
+2026-10-22 20:26:38.503888118 +0530 evidence/live/ansible-first.txt
++ tail -n 18 evidence/live/ansible-first.txt
+
+TASK [convertflow : Configure service] *****************************************
+changed: [localhost]
+
+TASK [convertflow : Run pending service handlers] ******************************
+
+RUNNING HANDLER [convertflow : Restart ConvertFlow] ****************************
+changed: [localhost]
+
+TASK [convertflow : Ensure service is enabled and started] *********************
+ok: [localhost]
+
+TASK [convertflow : Verify health endpoint] ************************************
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=9    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
++ set +x
+[?2004hsathwika:ConvertFlow$ 

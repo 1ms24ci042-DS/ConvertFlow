@@ -1,0 +1,44 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  94.72kB
+Step 1/13 : FROM maven:3.9.9-eclipse-temurin-17 AS build
+ ---> f58d59b6273e
+Step 2/13 : WORKDIR /build
+ ---> Using cache
+ ---> 95e47e56ca49
+Step 3/13 : COPY pom.xml .
+ ---> Using cache
+ ---> aae1f40082f7
+Step 4/13 : COPY src ./src
+ ---> Using cache
+ ---> e5c5f326cc68
+Step 5/13 : RUN mvn -B clean verify
+ ---> Using cache
+ ---> 056e4d08679a
+Step 6/13 : FROM eclipse-temurin:17-jre-jammy
+ ---> b3054a20e1a8
+Step 7/13 : RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+ ---> Using cache
+ ---> 052c6587cd73
+Step 8/13 : WORKDIR /app
+ ---> Using cache
+ ---> 41bb9e32ad10
+Step 9/13 : COPY --from=build /build/target/convertflow.jar /app/convertflow.jar
+ ---> Using cache
+ ---> 9aa763947b92
+Step 10/13 : USER 10001:10001
+ ---> Using cache
+ ---> 1257f467d15b
+Step 11/13 : ENV APP_PORT=8080
+ ---> Using cache
+ ---> 4a6463f72f58
+Step 12/13 : EXPOSE 8080
+ ---> Using cache
+ ---> f230e6616028
+Step 13/13 : ENTRYPOINT ["java", "-jar", "/app/convertflow.jar"]
+ ---> Using cache
+ ---> 1a544e259c91
+Successfully built 1a544e259c91
+Successfully tagged convertflow:1.0.0

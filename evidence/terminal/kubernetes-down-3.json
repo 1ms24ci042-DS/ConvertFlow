@@ -1,0 +1,13 @@
+{
+  "name": "kubernetes-down-3",
+  "commands": [
+    "date -Iseconds",
+    "kubectl --context kind-convertflow scale deployment/convertflow --replicas=3",
+    "EXPECTED_REPLICAS=3 python3 scripts/verify-replicas.py",
+    "kubectl --context kind-convertflow get pods -l app=convertflow"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:37.656379+05:30",
+  "screenshot": "report/screenshots/terminal-kubernetes-down-3.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

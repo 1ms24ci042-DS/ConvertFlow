@@ -1,0 +1,17 @@
+{
+  "verified_at": "2026-10-22T22:03:35.572400+05:30",
+  "health": {
+    "8080": {
+      "status": "UP"
+    },
+    "8081": {
+      "status": "UP"
+    },
+    "8083": {
+      "status": "UP"
+    }
+  },
+  "ready_pods": 3,
+  "terminating_pods": 0,
+  "systemd_active": "active"
+}

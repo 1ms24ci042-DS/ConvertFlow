@@ -98,6 +98,7 @@
   before skip=9pt, after skip=11pt
 }
 
+\usepackage{pdflscape}
 \begin{document}
 \pagestyle{empty}
 \sizeTwelve
@@ -305,6 +306,8 @@ Documentation \& Presentation (2 marks) & Report fully personalized  and confide
 \newpage
 \newpage
 \newpage
+\newpage
+\newpage
 \section*{Component 1: CI/CD Pipeline using Git, Maven and Jenkins}
 \subsection*{Abstract}
 ConvertFlow is a stateless REST API for unit conversion. GitHub hosts its preserved feature branch and merge history. Maven builds an executable JAR and runs 15 JUnit tests. A Jenkins Pipeline from SCM executes on a Linux executor, publishes test results, and archives the JAR. A new pushed commit was automatically built by SCM polling on this Ubuntu laptop.
@@ -338,30 +341,33 @@ Automated tests give immediate feedback before packaging. Eight conversion tests
 \subsection*{Results}
 Jenkins build \#2 completed SUCCESS in 9.863 seconds, starting at 2026-10-22T15:05:09.499000+00:00 UTC. Its cause is Started by an SCM change and its checked-out revision is bb4ffa7bd2b27d05dd86a60d867639fa87f4a539. The JUnit API confirms 15 passed tests, zero failed and zero skipped; artifact metadata and a downloaded JAR verify archival. Evidence includes the pushed commit/time, build JSON, test JSON, polling log, console output and job XML.
 
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-git-graph.png}\end{center}
-Figure 1. Browser screenshot of the actual local Git graph, served from the fresh evidence file. Existing branch and merge history is retained.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-maven-summary.png}\end{center}
-Figure 2. Browser screenshot of the fresh Ubuntu Maven log, zoomed for readability. This is a log view, not a synthetic terminal.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-scm.png}\end{center}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-git.png}\end{center}
+Figure 1. GNOME Terminal: executed Git branch and merge history commands. The original feature branch and merge remain intact. Captured 22 Oct 2026, 21:49:12 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-maven.png}\end{center}
+Figure 2. GNOME Terminal: Maven clean verify was executed and its saved log tail shows BUILD SUCCESS and all 15 tests passing. Captured 22 Oct 2026, 21:42:04 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-scm.png}\end{center}
 Figure 3. Jenkins configuration: Pipeline script from SCM with Git selected.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-repository.png}\end{center}
-Figure 4. Jenkins configuration: the actual private repository URL and credential reference.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-polling.png}\end{center}
-Figure 5. Jenkins SCM polling configuration, using the two-minute schedule from Jenkinsfile.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-build.png}\end{center}
-Figure 6. Actual Jenkins build \#2 page showing the SCM change cause and archived convertflow.jar.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-tests.png}\end{center}
-Figure 7. Actual Jenkins JUnit report for the automatic build: all 15 tests passed.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-console.png}\end{center}
-Figure 8. Actual Jenkins console tail showing test-result publication, artifact archival and SUCCESS.
-
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-repository.png}\end{center}
+Figure 4. Genuine Jenkins UI: actual private repository URL and credential identifier, without exposing a credential value.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-script-path.png}\end{center}
+Figure 5. Genuine Jenkins UI: branch */main and Jenkinsfile script path; lightweight checkout is enabled.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-polling.png}\end{center}
+Figure 6. Jenkins SCM polling configuration, using the two-minute schedule from Jenkinsfile.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-build.png}\end{center}
+Figure 7. Actual Jenkins build \#2 page showing the SCM change cause and archived convertflow.jar.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-tests.png}\end{center}
+Figure 8. Actual Jenkins JUnit report for the automatic build: all 15 tests passed.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/ubuntu-jenkins-auto-console.png}\end{center}
+Figure 9. Actual Jenkins console tail showing test-result publication, artifact archival and SUCCESS.
+\end{landscape}
 The expected 5 km conversion is 3.1068559611866697 miles. Five packaged-service HTTP contract checks additionally verified health, length conversion, temperature conversion, incompatible dimensions and an unknown route. These results are recorded in host-api-checks.txt.
 
 \subsection*{Conclusion}
@@ -419,43 +425,46 @@ Readiness and liveness HTTP probes request /health. Readiness determines eligibi
 Live evidence verifies configured probes, healthy Ready Pods, configuration injection and successful Service traffic. Deliberate process failure or a probe-induced restart was not part of this demonstration, so no fault-recovery event is claimed. Scaling is manual, not autoscaling. /health reports JSON application status and does not implement Prometheus metrics.
 
 \subsection*{Results}
-Ansible first run: ok=9, changed=6, unreachable=0, failed=0. Second run: ok=8, changed=0, unreachable=0, failed=0. The handler ran on the first run and was not notified on the unchanged second run. systemctl reports convertflow active, and its /health returns UP. This establishes idempotence for the observed unchanged state.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-ansible-recap-first.png}\end{center}
-Figure 9. Browser screenshot of the real first Ubuntu Ansible log: handler execution and successful recap.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-ansible-recap-second.png}\end{center}
-Figure 10. Browser screenshot of the real second Ubuntu Ansible log: zero changes and zero failures.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-systemd.png}\end{center}
-Figure 11. Browser screenshot of the actual systemd service status log.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-docker-build-summary.png}\end{center}
-Figure 12. Browser screenshot of the actual Docker build log tail: the image was built and tagged successfully.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-docker-api.png}\end{center}
-Figure 13. Live conversion response from the Docker container on 127.0.0.1:8081.
+Historical deployment on 22 October 2026 at approximately 20:26 IST: first run ok=9, changed=6, failed=0; original second run ok=8, changed=0, failed=0. The first-run transcript is preserved and displayed in a real terminal, clearly labelled as historical. During fresh verification, Maven rebuilt the JAR; a later Ansible run legitimately copied it and restarted the service (changed=2). The next unchanged run again reported ok=8, changed=0, failed=0. These fresh results and timestamps are recorded under evidence/terminal/. The active systemd service and health response are verified separately.
 
 Kubernetes recorded three Ready Pods, then five Ready Pods, then exactly three Ready Pods with none terminating. The same ReplicaSet remained responsible for the scaled workload. The Service returned UP and the expected 5 km conversion result. Live ConfigMap, Pod, Deployment, Service, EndpointSlice and node details are included in evidence/live/.
 
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-3.png}\end{center}
-Figure 14. Browser screenshot of the actual first three Ready Pods from the scaling run.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-5.png}\end{center}
-Figure 15. Browser screenshot of the actual five Ready Pods after scale-up.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-down-3.png}\end{center}
-Figure 16. Browser screenshot after scale-down: exactly three Ready Pods remain.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-service.png}\end{center}
-Figure 17. Browser screenshot of the actual NodePort Service, port 8080:30080.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-api.png}\end{center}
-Figure 18. Live conversion response through the Kubernetes Service port-forward on 127.0.0.1:8083.
-
-\begin{center}\includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{screenshots/ubuntu-kubernetes-probes.png}\end{center}
-Figure 19. Browser screenshot of the live Deployment description showing probes, ConfigMap reference, and available replicas.
-
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-ansible-first-history.png}\end{center}
+Figure 10. GNOME Terminal reviewing the preserved FIRST-RUN log from 22 October 2026, approximately 20:26 IST: restart handler and changed=6. This is historical log review, not a newly executed first deployment. Captured 22 Oct 2026, 21:41:52 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-ansible-refresh.png}\end{center}
+Figure 11. GNOME Terminal: after Maven rebuilt the JAR, Ansible legitimately copied the new artifact and ran its restart handler; changed=2. No role or service setting was altered to manufacture changes. Captured 22 Oct 2026, 21:45:48 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-ansible-idempotent.png}\end{center}
+Figure 12. GNOME Terminal: the subsequent unchanged Ansible run shows ok=8, changed=0, failed=0; no restart handler executes. Captured 22 Oct 2026, 21:53:31 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-systemd.png}\end{center}
+Figure 13. GNOME Terminal: actual active systemd service and successful health response on port 8080. Captured 22 Oct 2026, 21:41:56 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-docker-build.png}\end{center}
+Figure 14. GNOME Terminal: the Docker image build was executed; its real log tail confirms the completed image and convertflow:1.0.0 tag. Captured 22 Oct 2026, 21:42:09 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-docker-runtime.png}\end{center}
+Figure 15. GNOME Terminal: running Docker container, non-root runtime identity, health response and correct conversion result on port 8081. Captured 22 Oct 2026, 21:42:13 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-3.png}\end{center}
+Figure 16. GNOME Terminal: fresh verification of exactly three Ready Pods and the corresponding ReplicaSet before scaling. Captured 22 Oct 2026, 21:42:17 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-5.png}\end{center}
+Figure 17. GNOME Terminal: scale command to five replicas, exact readiness verification, and five Ready Pods. Captured 22 Oct 2026, 21:42:30 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-down-3.png}\end{center}
+Figure 18. GNOME Terminal: scale-down command and exact verification of three Ready Pods, with no terminating Pods remaining. Captured 22 Oct 2026, 21:42:37 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-service.png}\end{center}
+Figure 19. GNOME Terminal: actual Service configuration plus health and conversion responses through the Service port-forward on 8083. Captured 22 Oct 2026, 21:42:41 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-config.png}\end{center}
+Figure 20. GNOME Terminal: ConfigMap APP\_PORT value and printenv inside a running Pod both show 8080, verifying configuration injection. Captured 22 Oct 2026, 21:42:45 +0530.
+\end{landscape}
+\clearpage\begin{landscape}\begin{center}\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{screenshots/terminal-kubernetes-probes.png}\end{center}
+Figure 21. GNOME Terminal: live readiness/liveness probe definitions, ConfigMap reference, and Deployment availability at three replicas. Captured 22 Oct 2026, 21:42:50 +0530.
+\end{landscape}
 \subsection*{Conclusion}
 The same application runs successfully as a systemd service, a Docker container and a Kubernetes workload. Ansible avoids unnecessary changes on the second run; Kubernetes reconciles the requested replica counts while the Service provides a stable access path. The demo remains running, and no cluster, image, container or service cleanup was performed.
 
@@ -472,7 +481,9 @@ Project repository: https://github.com/1ms24ci042-DS/ConvertFlow (accessed 22 Oc
 
 \newpage
 \section*{Evidence and submission notes}
-All results above were obtained on 22 October 2026. Figures are genuine browser screenshots of Jenkins, live API responses, or the fresh raw log files served locally for viewing. Browser log views are identified in each caption. No terminal screenshot or historical success event was synthesized. Older Windows evidence and rendered log illustrations remain in the working directory but are excluded from the final report and clean submission.
+The preserved first deployment and Jenkins automatic build \#2 occurred on 22 October 2026. Fresh terminal verification and scaling were also executed on this date; each terminal capture has a timestamped JSON record and an actual session transcript under evidence/terminal/. The historical first Ansible run is reviewed in a terminal and is explicitly distinguished from new execution. All command figures are direct gnome-screenshot captures of GNOME Terminal windows showing executed commands, output and prompts; Jenkins figures remain genuine browser UI captures. No terminal image, successful event or historical timestamp was synthesized. Superseded browser log views, failed focus captures and older rendered illustrations are excluded from the current reports and selected submission figures.
+
+The report uses portrait A4 pages for narrative and individual landscape A4 evidence pages to keep terminal text and Jenkins details readable. Body text and headings are black; screenshots retain their original colours. Page numbering continues across orientations.
 
 The supplied institutional original\_template.tex defines the report structure and assessment rubric. A separate original assignment PDF was not found locally; the pre-existing ConvertFlow\_Report.pdf was an earlier report. The two components each include Abstract, Introduction, Implementation, Enhancement with rationale, Results, Conclusion and References. Signatures and marks remain blank. No coordinator collaborator invitation is required, as instructed by the student.
 

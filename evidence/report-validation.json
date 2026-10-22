@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-22T22:04:42.573289+05:30",
+  "pdf_pages": 36,
+  "docx_rendered_pages": 36,
+  "figures": 21,
+  "genuine_terminal_figures": 14,
+  "genuine_jenkins_ui_figures": 7,
+  "required_evidence_items": 17,
+  "all_pages_visually_inspected": true,
+  "docx_original_image_hashes_verified": true,
+  "original_jenkins_build_2_jar_hash_verified": true,
+  "reports": {
+    "ConvertFlow_1MS24CI042_Report.pdf": "37c1946dbd41bcfdf31bf79b2153566e7395233d01f9b01877284c4d81fba837",
+    "ConvertFlow_1MS24CI042_Report.docx": "0ed069d346bae15d3916594677c2d82df7df39ffb77ab4d39a0fee036591fb59"
+  }
+}

@@ -1,0 +1,11 @@
+Script started on 2026-10-22 21:42:41+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-kubernetes-config-20261022-214241/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/26" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:42:41+05:30
++ kubectl --context kind-convertflow get cm convertflow-config -o 'jsonpath={.data}'
+{"APP_PORT":"8080"}+ printf '
+'
+
++ kubectl --context kind-convertflow exec deployment/convertflow -- printenv APP_PORT
+8080
++ set +x
+[?2004hsathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ 

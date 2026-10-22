@@ -1,0 +1,21 @@
+Script started on 2026-10-22 21:49:07+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-git-20261022-214907/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:49:08+05:30
++ git log --graph --all '--format=%h %s' -8
+* 0729579 Preserve a stable snapshot of live Service access evidence
+* 19f79f4 Complete institutional report with verified CI and deployment evidence
+* bb4ffa7 Document verified Ubuntu deployment and published repository
+* 1f1ac78 Verify Ubuntu deployment and exact Kubernetes readiness after scaling
+*   4e3295b Merge conversion API with DevOps pipeline
+[32m|[m[33m\[m  
+[32m|[m * 460a70c Implement conversion API and automated HTTP tests
+* [33m|[m 6840939 Configure CI and application deployment
+[33m|[m[33m/[m  
+* 1cce190 Initialize ConvertFlow Maven project
++ git branch -a
+  feature/conversion-api[m
+* [32mmain[m
+  [31mremotes/origin/feature/conversion-api[m
+  [31mremotes/origin/main[m
++ set +x
+[?2004hsathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ 

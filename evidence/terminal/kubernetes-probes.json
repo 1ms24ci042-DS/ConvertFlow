@@ -1,0 +1,12 @@
+{
+  "name": "kubernetes-probes",
+  "commands": [
+    "date -Iseconds",
+    "kubectl --context kind-convertflow describe deployment convertflow | sed -n '/    Liveness:/,/    Environment:/p'",
+    "kubectl --context kind-convertflow get deployment convertflow"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:50.126756+05:30",
+  "screenshot": "report/screenshots/terminal-kubernetes-probes.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

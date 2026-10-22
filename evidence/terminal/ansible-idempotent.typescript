@@ -1,0 +1,27 @@
+Script started on 2026-10-22 21:53:15+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-ansible-idempotent-20261022-215314/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:53:15+05:30
++ sudo -v
+[sudo] password for sathwika: 
++ ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
++ tail -n 18 evidence/terminal/ansible-idempotent.txt
+
+TASK [convertflow : Copy built application] ************************************
+ok: [localhost]
+
+TASK [convertflow : Configure service] *****************************************
+ok: [localhost]
+
+TASK [convertflow : Run pending service handlers] ******************************
+
+TASK [convertflow : Ensure service is enabled and started] *********************
+ok: [localhost]
+
+TASK [convertflow : Verify health endpoint] ************************************
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=8    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
++ set +x
+[?2004hsathwika:ConvertFlow$ 

@@ -10,6 +10,7 @@ import re
 import textwrap
 import os
 import time
+from datetime import datetime
 
 # Use an unambiguous real UTC creation timestamp in generated PDF metadata.
 os.environ['TZ'] = 'UTC'
@@ -17,14 +18,17 @@ time.tzset()
 
 from PIL import Image as PILImage
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak,
-    Preformatted, Image, KeepTogether,
+    BaseDocTemplate, PageTemplate, Frame, NextPageTemplate,
+    Paragraph, Spacer, Table, TableStyle, PageBreak, Preformatted, Image, KeepTogether,
 )
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
+from docx.enum.section import WD_SECTION_START, WD_ORIENT
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / 'report'
@@ -34,6 +38,8 @@ facts = json.loads((ROOT / 'evidence/live/verified-facts.json').read_text())
 assert facts['passed_tests'] == 15
 original = (REPORT / 'original_template.tex').read_text()
 front = (REPORT / 'main.tex').read_text().split('\\section*{Component 1:', 1)[0]
+if '\\usepackage{pdflscape}' not in front:
+    front = front.replace('\\begin{document}', '\\usepackage{pdflscape}\n\\begin{document}')
 tex = [front]
 story = []
 document = Document()
@@ -45,10 +51,24 @@ normal = document.styles['Normal']
 normal.font.name, normal.font.size = 'Times New Roman', Pt(12)
 normal.font.color.rgb = RGBColor(0, 0, 0)
 normal.paragraph_format.space_after = Pt(8)
+normal.paragraph_format.line_spacing = 1.1
+normal.paragraph_format.keep_together = True
 for name, size in [('Title', 18), ('Heading 1', 18), ('Heading 2', 16), ('Heading 3', 14)]:
     document.styles[name].font.name = 'Times New Roman'
     document.styles[name].font.size = Pt(size)
     document.styles[name].font.color.rgb = RGBColor(0, 0, 0)
+    document.styles[name].paragraph_format.space_before = Pt(10)
+    document.styles[name].paragraph_format.space_after = Pt(8)
+    document.styles[name].paragraph_format.keep_with_next = True
+for style_name in ['Normal', 'Title', 'Heading 1', 'Heading 2', 'Heading 3', 'Footer']:
+    st = document.styles[style_name]
+    st.font.name = 'Times New Roman'
+    st.font.color.rgb = RGBColor(0, 0, 0)
+    fonts = st.element.get_or_add_rPr().get_or_add_rFonts()
+    for key in list(fonts.attrib):
+        if key.endswith('Theme'):
+            del fonts.attrib[key]
+document.styles['Footer'].font.size = Pt(12)
 styles = getSampleStyleSheet()
 for name, font, size, leading in [
     ('BodyReport', 'Times-Roman', 12, 16),
@@ -75,21 +95,57 @@ def escape(text):
     return ''.join(mapping.get(c, c) for c in text)
 
 
+evidence_mode = False
+front_page_count = 0
+
+
+def doc_section(wide=False):
+    sec = document.add_section(WD_SECTION_START.NEW_PAGE)
+    sec.orientation = WD_ORIENT.LANDSCAPE if wide else WD_ORIENT.PORTRAIT
+    sec.page_width, sec.page_height = (Inches(11.6929), Inches(8.2677)) if wide else (Inches(8.2677), Inches(11.6929))
+    sec.left_margin = sec.right_margin = Inches(1)
+    sec.top_margin = sec.bottom_margin = Inches(0.8)
+    for node in list(sec._sectPr.findall(qn('w:pgNumType'))):
+        sec._sectPr.remove(node)
+    return sec
+
+
+def ensure_body():
+    global evidence_mode
+    if evidence_mode:
+        story.extend([NextPageTemplate('Body'), PageBreak()])
+        doc_section(False)
+        evidence_mode = False
+
+
 def body(text):
+    ensure_body()
     story.append(paragraph(text))
     document.add_paragraph(text)
     tex.append(escape(text) + '\n\n')
 
 
 def heading(text, level=1):
+    ensure_body()
     story.append(paragraph(text, {1: 'HReport', 2: 'SubReport', 3: 'MinorReport'}[level]))
     document.add_heading(text, level=level)
     tex.append({1: '\\section*{', 2: '\\subsection*{', 3: '\\subsubsection*{'}[level] + escape(text) + '}\n')
 
 
 def page(frontmatter=False):
+    global front_page_count
+    ensure_body()
     story.append(PageBreak())
-    document.add_page_break()
+    if frontmatter:
+        front_page_count += 1
+    if frontmatter and front_page_count == 2:
+        sec = doc_section(False)
+        num = OxmlElement('w:pgNumType'); num.set(qn('w:start'), '1'); sec._sectPr.append(num)
+        sec.footer.is_linked_to_previous = False
+        p = sec.footer.paragraphs[0]; p.alignment = 1
+        fld = OxmlElement('w:fldSimple'); fld.set(qn('w:instr'), 'PAGE'); p._p.append(fld)
+    else:
+        document.add_page_break()
     if not frontmatter:
         tex.append('\\newpage\n')
 
@@ -107,9 +163,19 @@ def table(rows, widths):
     story.append(t)
     dt = document.add_table(rows=0, cols=len(rows[0]))
     dt.style = 'Table Grid'
+    dt.autofit = False
+    for column, width in zip(dt.columns, widths):
+        column.width = Pt(width)
     for row in rows:
-        for cell, value in zip(dt.add_row().cells, row):
+        dr = dt.add_row()
+        dr._tr.get_or_add_trPr().append(OxmlElement('w:cantSplit'))
+        for cell, value, width in zip(dr.cells, row, widths):
+            cell.width = Pt(width)
             cell.text = str(value)
+            for p in cell.paragraphs:
+                p.paragraph_format.space_after = Pt(0)
+                for run in p.runs:
+                    run.font.name = 'Times New Roman'; run.font.size = Pt(12)
 
 
 figure_number = 0
@@ -117,22 +183,35 @@ figures_used = []
 
 
 def figure(name, caption):
-    global figure_number
+    global figure_number, evidence_mode
     figure_number += 1
     path = REPORT / 'screenshots' / (name + '.png')
     assert path.is_file(), path
     figures_used.append(path.relative_to(ROOT).as_posix())
     im = PILImage.open(path)
-    width = 451
+    # A4 landscape evidence pages preserve readable terminal text and UI detail.
+    if not evidence_mode:
+        story.extend([NextPageTemplate('Evidence'), PageBreak()])
+        doc_section(True)
+    else:
+        story.append(PageBreak())
+        document.add_page_break()
+    evidence_mode = True
+    width = landscape(A4)[0] - 144
     height = width * im.height / im.width
-    if height > 360:
-        width *= 360 / height
-        height = 360
+    if height > 398:
+        width *= 398 / height
+        height = 398
     text = f'Figure {figure_number}. {caption}'
+    if name.startswith('terminal-'):
+        capture = json.loads((ROOT / 'evidence/terminal' / (name[9:] + '.json')).read_text())
+        text += ' Captured ' + datetime.fromisoformat(capture['captured_at']).strftime('%d %b %Y, %H:%M:%S %z') + '.'
     story.append(KeepTogether([Image(str(path), width=width, height=height), paragraph(text)]))
     document.add_picture(str(path), width=Inches(width / 72))
+    document.paragraphs[-1].paragraph_format.keep_with_next = True
     document.add_paragraph(text)
-    tex.append('\\begin{center}\\includegraphics[width=\\linewidth,height=0.55\\textheight,keepaspectratio]{screenshots/' + name + '.png}\\end{center}\n' + escape(text) + '\n\n')
+    document.paragraphs[-1].paragraph_format.keep_together = True
+    tex.append('\\clearpage\\begin{landscape}\\begin{center}\\includegraphics[width=\\linewidth,height=0.78\\textheight,keepaspectratio]{screenshots/' + name + '.png}\\end{center}\n' + escape(text) + '\n\\end{landscape}\n')
 
 
 def code(file, first=None, last=None):
@@ -183,6 +262,9 @@ for text, gap in [
         story.extend([paragraph(text, 'CenterReport'), Spacer(1, gap)])
     p = document.add_paragraph(text)
     p.alignment = 1
+    p.paragraph_format.space_after = Pt(gap + 4)
+    if text in ['SELF LEARNING ACTIVITY REPORT', 'DEVOPS']:
+        p.runs[0].font.size = Pt(18); p.runs[0].bold = True
 page(True)
 story.extend([Spacer(1, 65), paragraph('Certificate', 'HReport'), Spacer(1, 25)])
 document.add_heading('Certificate', 1)
@@ -244,10 +326,11 @@ heading('Enhancement with rationale', 2)
 body('Automated tests give immediate feedback before packaging. Eight conversion tests cover normal unit conversions and boundary/error behavior; seven HTTP tests cover routing, query validation and response behavior. Both the local Maven build and Jenkins automatic build passed all 15 tests with zero failures, errors or skips. GitHub Actions supplies supplementary CI; recorded runs 39800624574 and 39801187031 also completed successfully. Jenkins evidence independently satisfies the required pipeline.')
 heading('Results', 2)
 body(f"Jenkins build #{facts['automatic_build']} completed SUCCESS in {facts['duration_seconds']:.3f} seconds, starting at {facts['build_timestamp']} UTC. Its cause is Started by an SCM change and its checked-out revision is {facts['automatic_commit']}. The JUnit API confirms 15 passed tests, zero failed and zero skipped; artifact metadata and a downloaded JAR verify archival. Evidence includes the pushed commit/time, build JSON, test JSON, polling log, console output and job XML.")
-figure('ubuntu-git-graph', 'Browser screenshot of the actual local Git graph, served from the fresh evidence file. Existing branch and merge history is retained.')
-figure('ubuntu-maven-summary', 'Browser screenshot of the fresh Ubuntu Maven log, zoomed for readability. This is a log view, not a synthetic terminal.')
+figure('terminal-git', 'GNOME Terminal: executed Git branch and merge history commands. The original feature branch and merge remain intact.')
+figure('terminal-maven', 'GNOME Terminal: Maven clean verify was executed and its saved log tail shows BUILD SUCCESS and all 15 tests passing.')
 figure('ubuntu-jenkins-scm', 'Jenkins configuration: Pipeline script from SCM with Git selected.')
-figure('ubuntu-jenkins-repository', 'Jenkins configuration: the actual private repository URL and credential reference.')
+figure('ubuntu-jenkins-repository', 'Genuine Jenkins UI: actual private repository URL and credential identifier, without exposing a credential value.')
+figure('ubuntu-jenkins-script-path', 'Genuine Jenkins UI: branch */main and Jenkinsfile script path; lightweight checkout is enabled.')
 figure('ubuntu-jenkins-polling', 'Jenkins SCM polling configuration, using the two-minute schedule from Jenkinsfile.')
 figure('ubuntu-jenkins-auto-build', 'Actual Jenkins build #2 page showing the SCM change cause and archived convertflow.jar.')
 figure('ubuntu-jenkins-auto-tests', 'Actual Jenkins JUnit report for the automatic build: all 15 tests passed.')
@@ -285,19 +368,20 @@ heading('Enhancement with rationale', 2)
 body('Readiness and liveness HTTP probes request /health. Readiness determines eligibility to receive Service traffic; liveness detects an unhealthy running process and can trigger restart. The ConfigMap supplies APP_PORT=8080, confirmed with printenv inside a live Pod. The multi-stage image excludes build tools from the runtime, and non-root settings reduce runtime privileges. These choices improve deployment consistency without introducing a database or extra service.')
 body('Live evidence verifies configured probes, healthy Ready Pods, configuration injection and successful Service traffic. Deliberate process failure or a probe-induced restart was not part of this demonstration, so no fault-recovery event is claimed. Scaling is manual, not autoscaling. /health reports JSON application status and does not implement Prometheus metrics.')
 heading('Results', 2)
-body('Ansible first run: ok=9, changed=6, unreachable=0, failed=0. Second run: ok=8, changed=0, unreachable=0, failed=0. The handler ran on the first run and was not notified on the unchanged second run. systemctl reports convertflow active, and its /health returns UP. This establishes idempotence for the observed unchanged state.')
-figure('ubuntu-ansible-recap-first', 'Browser screenshot of the real first Ubuntu Ansible log: handler execution and successful recap.')
-figure('ubuntu-ansible-recap-second', 'Browser screenshot of the real second Ubuntu Ansible log: zero changes and zero failures.')
-figure('ubuntu-systemd', 'Browser screenshot of the actual systemd service status log.')
-figure('ubuntu-docker-build-summary', 'Browser screenshot of the actual Docker build log tail: the image was built and tagged successfully.')
-figure('ubuntu-docker-api', 'Live conversion response from the Docker container on 127.0.0.1:8081.')
+body('Historical deployment on 22 October 2026 at approximately 20:26 IST: first run ok=9, changed=6, failed=0; original second run ok=8, changed=0, failed=0. The first-run transcript is preserved and displayed in a real terminal, clearly labelled as historical. During fresh verification, Maven rebuilt the JAR; a later Ansible run legitimately copied it and restarted the service (changed=2). The next unchanged run again reported ok=8, changed=0, failed=0. These fresh results and timestamps are recorded under evidence/terminal/. The active systemd service and health response are verified separately.')
 body('Kubernetes recorded three Ready Pods, then five Ready Pods, then exactly three Ready Pods with none terminating. The same ReplicaSet remained responsible for the scaled workload. The Service returned UP and the expected 5 km conversion result. Live ConfigMap, Pod, Deployment, Service, EndpointSlice and node details are included in evidence/live/.')
-figure('ubuntu-kubernetes-3', 'Browser screenshot of the actual first three Ready Pods from the scaling run.')
-figure('ubuntu-kubernetes-5', 'Browser screenshot of the actual five Ready Pods after scale-up.')
-figure('ubuntu-kubernetes-down-3', 'Browser screenshot after scale-down: exactly three Ready Pods remain.')
-figure('ubuntu-kubernetes-service', 'Browser screenshot of the actual NodePort Service, port 8080:30080.')
-figure('ubuntu-kubernetes-api', 'Live conversion response through the Kubernetes Service port-forward on 127.0.0.1:8083.')
-figure('ubuntu-kubernetes-probes', 'Browser screenshot of the live Deployment description showing probes, ConfigMap reference, and available replicas.')
+figure('terminal-ansible-first-history', 'GNOME Terminal reviewing the preserved FIRST-RUN log from 22 October 2026, approximately 20:26 IST: restart handler and changed=6. This is historical log review, not a newly executed first deployment.')
+figure('terminal-ansible-refresh', 'GNOME Terminal: after Maven rebuilt the JAR, Ansible legitimately copied the new artifact and ran its restart handler; changed=2. No role or service setting was altered to manufacture changes.')
+figure('terminal-ansible-idempotent', 'GNOME Terminal: the subsequent unchanged Ansible run shows ok=8, changed=0, failed=0; no restart handler executes.')
+figure('terminal-systemd', 'GNOME Terminal: actual active systemd service and successful health response on port 8080.')
+figure('terminal-docker-build', 'GNOME Terminal: the Docker image build was executed; its real log tail confirms the completed image and convertflow:1.0.0 tag.')
+figure('terminal-docker-runtime', 'GNOME Terminal: running Docker container, non-root runtime identity, health response and correct conversion result on port 8081.')
+figure('terminal-kubernetes-3', 'GNOME Terminal: fresh verification of exactly three Ready Pods and the corresponding ReplicaSet before scaling.')
+figure('terminal-kubernetes-5', 'GNOME Terminal: scale command to five replicas, exact readiness verification, and five Ready Pods.')
+figure('terminal-kubernetes-down-3', 'GNOME Terminal: scale-down command and exact verification of three Ready Pods, with no terminating Pods remaining.')
+figure('terminal-kubernetes-service', 'GNOME Terminal: actual Service configuration plus health and conversion responses through the Service port-forward on 8083.')
+figure('terminal-kubernetes-config', 'GNOME Terminal: ConfigMap APP_PORT value and printenv inside a running Pod both show 8080, verifying configuration injection.')
+figure('terminal-kubernetes-probes', 'GNOME Terminal: live readiness/liveness probe definitions, ConfigMap reference, and Deployment availability at three replicas.')
 heading('Conclusion', 2)
 body('The same application runs successfully as a systemd service, a Docker container and a Kubernetes workload. Ansible avoids unnecessary changes on the second run; Kubernetes reconciles the requested replica counts while the Service provides a stable access path. The demo remains running, and no cluster, image, container or service cleanup was performed.')
 refs([
@@ -309,7 +393,8 @@ refs([
 ])
 page()
 heading('Evidence and submission notes')
-body('All results above were obtained on 22 October 2026. Figures are genuine browser screenshots of Jenkins, live API responses, or the fresh raw log files served locally for viewing. Browser log views are identified in each caption. No terminal screenshot or historical success event was synthesized. Older Windows evidence and rendered log illustrations remain in the working directory but are excluded from the final report and clean submission.')
+body('The preserved first deployment and Jenkins automatic build #2 occurred on 22 October 2026. Fresh terminal verification and scaling were also executed on this date; each terminal capture has a timestamped JSON record and an actual session transcript under evidence/terminal/. The historical first Ansible run is reviewed in a terminal and is explicitly distinguished from new execution. All command figures are direct gnome-screenshot captures of GNOME Terminal windows showing executed commands, output and prompts; Jenkins figures remain genuine browser UI captures. No terminal image, successful event or historical timestamp was synthesized. Superseded browser log views, failed focus captures and older rendered illustrations are excluded from the current reports and selected submission figures.')
+body('The report uses portrait A4 pages for narrative and individual landscape A4 evidence pages to keep terminal text and Jenkins details readable. Body text and headings are black; screenshots retain their original colours. Page numbering continues across orientations.')
 body('The supplied institutional original_template.tex defines the report structure and assessment rubric. A separate original assignment PDF was not found locally; the pre-existing ConvertFlow_Report.pdf was an earlier report. The two components each include Abstract, Introduction, Implementation, Enhancement with rationale, Results, Conclusion and References. Signatures and marks remain blank. No coordinator collaborator invitation is required, as instructed by the student.')
 body('Repository: ' + facts['repository'] + '. The repository is private, so the evaluator needs authorized access or the clean submission ZIP. Credentials, dependency caches, bundled JDKs and unrelated files are excluded. The working repository and its full history are retained; the ZIP includes a Git bundle for history review and restore.')
 body('Archived automatic-build JAR SHA-256: ' + facts['archived_jar_sha256'])
@@ -324,20 +409,28 @@ def footer(canvas, doc):
         canvas.drawImage(str(REPORT / 'ramaiah_logo.jpg'), 72, 777, width=147, height=45,
                          preserveAspectRatio=True, mask='auto')
         canvas.setFont('Times-Bold', 12)
-        canvas.setFillColor(colors.HexColor('#1b1f5c'))
+        canvas.setFillColor(colors.black)
         canvas.drawRightString(523, 804, 'Department of CSE (Artificial Intelligence &')
         canvas.drawRightString(523, 789, 'Machine Learning) and CSE (Cyber Security)')
         canvas.setStrokeColor(colors.HexColor('#8b1e3f'))
         canvas.setLineWidth(1.2); canvas.line(72, 768, 523, 768)
     else:
         canvas.setFont('Times-Roman', 12); canvas.setFillColor(colors.black)
-        canvas.drawCentredString(A4[0] / 2, 38, str(doc.page - 2))
+        canvas.drawCentredString(canvas._pagesize[0] / 2, 38, str(doc.page - 2))
 
 
 pdf = OUT / 'ConvertFlow_1MS24CI042_Report.pdf'
-SimpleDocTemplate(str(pdf), pagesize=A4, rightMargin=72, leftMargin=72,
-                  topMargin=55, bottomMargin=60, title='ConvertFlow - DevOps Report',
-                  author='Dhanekula Sathwika').build(story, onFirstPage=footer, onLaterPages=footer)
+doc = BaseDocTemplate(str(pdf), pagesize=A4, rightMargin=72, leftMargin=72,
+                     topMargin=55, bottomMargin=60, title='ConvertFlow - DevOps Report',
+                     author='Dhanekula Sathwika')
+doc.addPageTemplates([
+    PageTemplate(id='Body', pagesize=A4, frames=[Frame(72, 60, A4[0]-144, A4[1]-115,
+                 leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)], onPage=footer),
+    PageTemplate(id='Evidence', pagesize=landscape(A4), frames=[Frame(72, 60,
+                 landscape(A4)[0]-144, landscape(A4)[1]-115,
+                 leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)], onPage=footer),
+])
+doc.build(story)
 document.core_properties.title = 'ConvertFlow - DevOps Report'
 document.core_properties.author = 'Dhanekula Sathwika'
 document.save(OUT / 'ConvertFlow_1MS24CI042_Report.docx')

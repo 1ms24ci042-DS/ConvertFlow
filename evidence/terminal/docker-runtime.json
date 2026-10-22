@@ -1,0 +1,14 @@
+{
+  "name": "docker-runtime",
+  "commands": [
+    "date -Iseconds",
+    "sg docker -c 'docker ps --filter name=convertflow-demo --format \"table {{.Names}}\\t{{.Image}}\\t{{.Status}}\"'",
+    "sg docker -c 'docker exec convertflow-demo id'",
+    "curl -fsS http://127.0.0.1:8081/health; printf '\n'",
+    "curl -fsS 'http://127.0.0.1:8081/convert?from=km&to=mi&value=5'; printf '\n'"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:13.197679+05:30",
+  "screenshot": "report/screenshots/terminal-docker-runtime.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "docker-build",
+  "commands": [
+    "date -Iseconds",
+    "sg docker -c 'docker build -t convertflow:1.0.0 .' > evidence/terminal/docker-build.txt 2>&1",
+    "tail -n 12 evidence/terminal/docker-build.txt"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:09.045970+05:30",
+  "screenshot": "report/screenshots/terminal-docker-build.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

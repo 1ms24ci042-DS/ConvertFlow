@@ -1,0 +1,19 @@
+Script started on 2026-10-22 21:42:05+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-docker-build-20261022-214204/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/14" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:42:05+05:30
++ sg docker -c 'docker build -t convertflow:1.0.0 .'
++ tail -n 12 evidence/terminal/docker-build.txt
+ ---> 1257f467d15b
+Step 11/13 : ENV APP_PORT=8080
+ ---> Using cache
+ ---> 4a6463f72f58
+Step 12/13 : EXPOSE 8080
+ ---> Using cache
+ ---> f230e6616028
+Step 13/13 : ENTRYPOINT ["java", "-jar", "/app/convertflow.jar"]
+ ---> Using cache
+ ---> 1a544e259c91
+Successfully built 1a544e259c91
+Successfully tagged convertflow:1.0.0
++ set +x
+[?2004hsathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ 

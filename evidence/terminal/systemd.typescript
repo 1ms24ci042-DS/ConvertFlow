@@ -1,0 +1,21 @@
+Script started on 2026-10-22 21:41:52+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-systemd-20261022-214152/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/10" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:41:52+05:30
++ systemctl --no-pager status convertflow
++ head -n 10
+● convertflow.service - ConvertFlow Unit Converter API
+     Loaded: loaded (/etc/systemd/system/convertflow.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-10-22 20:26:37 IST; 1h 15min ago
+   Main PID: 22161 (java)
+      Tasks: 28 (limit: 16597)
+     Memory: 35.8M (peak: 39.2M)
+        CPU: 8.619s
+     CGroup: /system.slice/convertflow.service
+             └─22161 /usr/bin/java -jar /opt/convertflow/convertflow.jar
+
++ curl -fsS http://127.0.0.1:8080/health
+{"status":"UP"}+ printf '
+'
+
++ set +x
+[?2004hsathwika:ConvertFlow$ 

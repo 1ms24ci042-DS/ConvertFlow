@@ -11,6 +11,8 @@ out = root / 'submission'
 out.mkdir(exist_ok=True)
 tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=root).decode().split('\0')
 tracked = [p for p in tracked if p]
+figures = set(json.loads((root / 'report/figures-used.json').read_text()))
+tracked = [p for p in tracked if not p.startswith('report/screenshots/') or p in figures]
 bundle = out / 'ConvertFlow-history.bundle'
 subprocess.run(['git', 'bundle', 'create', str(bundle), '--all'], cwd=root, check=True)
 subprocess.run(['git', 'bundle', 'verify', str(bundle)], cwd=root, check=True)
@@ -39,7 +41,8 @@ with zipfile.ZipFile(archive) as z:
 (out / 'MANIFEST.json').write_text(json.dumps(manifest, indent=2) + '\n')
 checksums = []
 for p in [archive, bundle, out / 'ConvertFlow_1MS24CI042_Report.pdf',
-          out / 'ConvertFlow_1MS24CI042_Report.docx', out / 'convertflow-build-2.jar']:
+          out / 'ConvertFlow_1MS24CI042_Report.docx', out / 'convertflow-build-2.jar',
+          out / 'MANIFEST.json', out / 'README.txt']:
     checksums.append(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name)
 (out / 'SHA256SUMS.txt').write_text('\n'.join(checksums) + '\n')
 print('Created', archive, 'with', len(manifest), 'files plus manifest;', archive.stat().st_size, 'bytes')

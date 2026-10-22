@@ -1,0 +1,16 @@
+Script started on 2026-10-22 21:42:37+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-kubernetes-service-20261022-214237/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/24" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:42:37+05:30
++ kubectl --context kind-convertflow get svc convertflow
+NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+convertflow   NodePort   10.96.133.255   <none>        8080:30080/TCP   73m
++ curl -fsS http://127.0.0.1:8083/health
+{"status":"UP"}+ printf '
+'
+
++ curl -fsS 'http://127.0.0.1:8083/convert?from=km&to=mi&value=5'
+{"from":"km","to":"mi","value":5.0,"result":3.1068559611866697}+ printf '
+'
+
++ set +x
+[?2004hsathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ [Ksathwika:ConvertFlow$ 

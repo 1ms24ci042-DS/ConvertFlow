@@ -1,0 +1,12 @@
+{
+  "name": "kubernetes-config",
+  "commands": [
+    "date -Iseconds",
+    "kubectl --context kind-convertflow get cm convertflow-config -o jsonpath='{.data}'; printf '\n'",
+    "kubectl --context kind-convertflow exec deployment/convertflow -- printenv APP_PORT"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:45.969224+05:30",
+  "screenshot": "report/screenshots/terminal-kubernetes-config.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

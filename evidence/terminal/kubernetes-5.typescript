@@ -1,0 +1,17 @@
+Script started on 2026-10-22 21:42:17+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-kubernetes-5-20261022-214217/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/20" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:42:17+05:30
++ kubectl --context kind-convertflow scale deployment/convertflow --replicas=5
+deployment.apps/convertflow scaled
++ EXPECTED_REPLICAS=5
++ python3 scripts/verify-replicas.py
+Verified 5 Pods, all Ready, none terminating
++ kubectl --context kind-convertflow get pods -l app=convertflow
+NAME                          READY   STATUS    RESTARTS   AGE
+convertflow-dbf888cb9-b5z26   1/1     Running   0          73m
+convertflow-dbf888cb9-l26qz   1/1     Running   0          8s
+convertflow-dbf888cb9-lp8dq   1/1     Running   0          8s
+convertflow-dbf888cb9-q6sng   1/1     Running   0          73m
+convertflow-dbf888cb9-wtx7q   1/1     Running   0          73m
++ set +x
+[?2004hsathwika:ConvertFlow$ 

@@ -1,0 +1,22 @@
+Script started on 2026-10-22 21:41:56+05:30 [COMMAND="bash --noprofile --rcfile /tmp/convertflow-capture-maven-20261022-214156/bashrc -i" TERM="xterm-256color" TTY="/dev/pts/12" COLUMNS="84" LINES="28"]
+[H[2J[3J+ date -Iseconds
+2026-10-22T21:41:56+05:30
++ mvn -B -ntp clean verify
++ tail -n 15 evidence/terminal/maven-build.txt
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.557 s -- in in.ramaiah.convertflow.AppTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ convertflow ---
+[INFO] Building jar: /home/sathwika/Downloads/devops-project/2026-10-22/i-x20/outputs/ConvertFlow/target/convertflow.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.507 s
+[INFO] Finished at: 2026-10-22T21:42:00+05:30
+[INFO] ------------------------------------------------------------------------
++ set +x
+[?2004hsathwika:ConvertFlow$ 

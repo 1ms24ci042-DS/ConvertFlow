@@ -1,0 +1,13 @@
+{
+  "name": "git",
+  "commands": [
+    "date -Iseconds",
+    "git log --graph --all --format='%h %s' -8",
+    "git branch -a"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:49:12.037107+05:30",
+  "screenshot": "report/screenshots/terminal-git.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt",
+  "window_object": "/org/gnome/Terminal/window/23"
+}

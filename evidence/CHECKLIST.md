@@ -11,8 +11,10 @@
 - [x] Kind Kubernetes deployment, Service access on 8083, ready endpoints and health/conversion responses.
 - [x] Actual 3 -> 5 -> 3 scaling; every observation has exact Ready Pod count with no terminating Pods.
 - [x] ConfigMap injection, health probe configuration, matching labels/selectors, resource/security settings inspected live.
-- [x] Genuine browser screenshots of Jenkins, API responses and fresh logs; no synthesized terminal screenshots.
+- [x] Genuine GNOME Terminal command/output/prompt screenshots; genuine Jenkins browser UI retained; no synthesized terminal images.
 - [x] Institutional report has separate complete Component 1 and Component 2 sections; signatures and marks blank.
-- [x] Final PDF/DOCX generation and PDF visual review; final ZIP manifest is recorded under submission/.
+- [x] Corrected PDF and DOCX generated, with actual DOCX rendered in LibreOffice; all pages inspected. ZIP manifest and checksums regenerated after final packaging.
 
 No collaborator invitation: student explicitly requested that it was not needed. No separate assignment PDF was found; the supplied institutional LaTeX template contains the requirements/rubrics. Historical supplied evidence is preserved but excluded from the new clean submission; see PROVENANCE.md.
+
+The detailed 17-item evidence-to-figure mapping is in REQUIRED_EVIDENCE.md. The first-run Ansible log is historical; the fresh rebuilt-JAR refresh (changed=2) is distinct from the following unchanged run (changed=0).

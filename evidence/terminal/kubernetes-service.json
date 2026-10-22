@@ -1,0 +1,13 @@
+{
+  "name": "kubernetes-service",
+  "commands": [
+    "date -Iseconds",
+    "kubectl --context kind-convertflow get svc convertflow",
+    "curl -fsS http://127.0.0.1:8083/health; printf '\n'",
+    "curl -fsS 'http://127.0.0.1:8083/convert?from=km&to=mi&value=5'; printf '\n'"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:41.814725+05:30",
+  "screenshot": "report/screenshots/terminal-kubernetes-service.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}

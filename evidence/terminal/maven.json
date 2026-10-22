@@ -1,0 +1,12 @@
+{
+  "name": "maven",
+  "commands": [
+    "date -Iseconds",
+    "mvn -B -ntp clean verify > evidence/terminal/maven-build.txt 2>&1",
+    "tail -n 15 evidence/terminal/maven-build.txt"
+  ],
+  "historical_log_review": false,
+  "captured_at": "2026-10-22T21:42:04.881249+05:30",
+  "screenshot": "report/screenshots/terminal-maven.png",
+  "method": "gnome-screenshot --window; real GNOME Terminal with Bash xtrace and prompt"
+}
