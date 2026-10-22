@@ -1,0 +1,50 @@
+---
+- name: Install Java runtime
+  ansible.builtin.apt:
+    name: openjdk-17-jre-headless
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+- name: Create application user
+  ansible.builtin.user:
+    name: "{{ app_user }}"
+    system: true
+    create_home: false
+    shell: /usr/sbin/nologin
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0755'
+- name: Copy built application
+  ansible.builtin.copy:
+    src: "{{ app_jar }}"
+    dest: "{{ app_dir }}/convertflow.jar"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: '0644'
+  notify: Restart ConvertFlow
+- name: Configure service
+  ansible.builtin.template:
+    src: convertflow.service.j2
+    dest: /etc/systemd/system/convertflow.service
+    mode: '0644'
+  notify: Restart ConvertFlow
+- name: Run pending service handlers
+  ansible.builtin.meta: flush_handlers
+- name: Ensure service is enabled and started
+  ansible.builtin.systemd_service:
+    name: convertflow
+    enabled: true
+    state: started
+    daemon_reload: true
+- name: Verify health endpoint
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ app_port }}/health"
+    status_code: 200
+  register: health
+  retries: 10
+  delay: 2
+  until: health.status == 200

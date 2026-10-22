@@ -1,0 +1,7 @@
+---
+- name: Restart ConvertFlow
+  ansible.builtin.systemd_service:
+    name: convertflow
+    daemon_reload: true
+    state: restarted
+    enabled: true

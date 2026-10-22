@@ -1,0 +1,5 @@
+---
+app_port: 8080
+app_user: convertflow
+app_dir: /opt/convertflow
+app_jar: "{{ playbook_dir }}/../target/convertflow.jar"

@@ -1,0 +1,6 @@
+---
+- name: Configure ConvertFlow on an Ubuntu systemd host
+  hosts: appservers
+  become: true
+  roles:
+    - convertflow

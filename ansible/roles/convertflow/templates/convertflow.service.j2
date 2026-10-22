@@ -1,0 +1,18 @@
+[Unit]
+Description=ConvertFlow Unit Converter API
+After=network.target
+
+[Service]
+User={{ app_user }}
+Group={{ app_user }}
+WorkingDirectory={{ app_dir }}
+Environment=APP_PORT={{ app_port }}
+ExecStart=/usr/bin/java -jar {{ app_dir }}/convertflow.jar
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
